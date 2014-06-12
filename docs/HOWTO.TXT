@@ -1,0 +1,195 @@
+***** INTRODUCTION
+
+The design of MapCollaborator is oriented around two distinct types of data layer:
+    Core        The core layers are the editable datasets.
+                These are the ones which form the collaborative component, as people can query them,
+                edit the shapes using the digitizer tools, and save their changes for approval.
+
+                The core layers are visualized via WMS (MapServer) using the mapfile core.map
+                and the user interface behaviors are configured in config.php
+
+                There are hardcoded 3 core datasets:
+                    points      The core_points PostGIS table
+                    lines       The core_lines PostGIS table
+                    polygons    The core_polygons PostGIS table  (actually multipolygons)
+                There is only 1 table for each geomtype; if your need is for a MapCollaborator to have 3 point layers,
+                for example, you'll have some significant adjustment to do...
+
+    Context     Context layers are an arbitrary set of additional WMS layers, giving additional context and information,
+                such as administrative boundaries.
+                These layers may be click-queried (per config.php) but will not be available for editing, in vector format, etc.
+                They are defined in both config.php (for the UI behaviors) and in context.map (the MapServer mapfile for rendering and querying)
+
+Click-querying is handled differently for core layers and context layers:
+
+    Context layers (if clickquery is enabled in config.php) make a simple WMS GetFeatureInfo request to context.map
+        The response is HTML, and is displayed in a popup bubble on the map.
+        The response HTML is configured via MapServer's TEMPLATE keyword and a HTML template in wms/templates
+        It is highly recommended that you match the WMS layer name to the name of the template, for easier management.
+
+    Core layers (if clickquery is enabled in config.php) make a request to the clickquery() endpoint defined in the
+        Site Controller (controllers/site.php) and the reply is a JSON object containing:
+            .html           HTML for the popup bubble
+            .geometry       the geometry in JavaScript format (compatible with Leaflet), for highlighting and/or editing
+            .attributes     the attributes, for more raw handling if HTML popups aren't sufficient
+
+The front-facing map is designed to be readily extended and modified, in both JavaScript code, non-dense HTML code, and
+well-documented CSS. Features include left and right sidebars as well as a footer bar, any of which can be disabled easily using
+documentation in the CSS file and in this HOWTO document.
+
+
+
+***** HOWTO: Show or Hide the Footer Bar, and the Right & Left Sidebars
+
+- In index.css you'll want to set display:none on the bar you want to hide.
+
+- You may also want to empty out the HTML (index.phtml) so the browser isn't downloading useless paragraphs
+    of footers and images, which aren't intended to be displayed anyway.
+
+- Hiding the footer should affect the height of #map as well as #leftsidebar and #rightsidebar
+    To adjust the height, look for the #map declaration and find the calc() which sets the height.
+    Increase this height by the height which wou ld have been consumed by the #footer,
+    e.g. if the height is calc(100% - 117px) and you just freed up 40px by hiding the footer, change the 117 to a 77.
+
+- Hiding the sidebars affects the grid system, since the two sidebars share a row with #map
+    If you hide either one, look in map.phtml for #map and adjust the span_XX_of_10 CSS classes so the visible rows total up to 10.
+    For example, if you have only the left bar showing and it's span_3_of_10 then the #map should be span_7_of_10
+
+Tip: If you style the sidebars of footer to have a border, keep in mind that the border typically DOES NOT count within the width or height. For example, if #footer is 40px tall and has a 2px border-top, your calc() should account for 42px and not for 40px. In the case of the sidebars, adding a border can cause the row to exceed 100% width -- the body overflow:hidden should keep this from misbehaving too badly, but watch out.
+
+
+
+***** HOWTO: Customize the map (basemaps, starting view)
+
+Edit application/views/site/mapconstants.js
+
+It's pretty well self-documented.
+
+
+
+***** HOWTO: Suppress the automatic Welcome popup dialog
+
+This is #dialog_welcome and is a standard jQuery UI Dialog. To remove this popup, simply delete or comment out two items:
+- The HTML for dialog_welcome
+- The JavaScript code which makes a modal dialog out of #dialog_welcome    See initMiscDialogsAndButtons()
+
+
+
+***** HOWTO: Enable and disable the core layers (editable vector dataset)
+
+Go into config.php and look for core_layers, then the specific core layer (points, lines, polygons)
+
+Set the "enabled" flag accordingly.
+
+This should cause the UI to respond by suppressing these UI components.
+
+
+
+***** HOWTO: Add and adjust the context layers (non-editable WMS layers)
+
+Go into config.php and look for context_layers
+
+Add and edit and delete paragraphs. The variables available to each paragraph are clearly defined in the comments.
+
+This should cause the UI change the behavior of these layers, e.g. changing the legend, changing the wording, suppressing or enabling click behavior.
+
+
+
+***** HOWTO: Configure the editing fields when entering a core feature: note, point, line, polygon
+
+The Easy Way:
+    Use the automated form generation capability; see config.php and look for the "core_layers" section and the "form_fields" option.
+    This should allow you to easily deploy a form with titles over input boxes, default values, placeholder texts, etc.
+    Tip: The "custom" field type allows you to load a HTML template instead of using the default.
+        If someone has a custom need, this will likely accomplish it and still allow the "easy way out" for the other fields.
+        See the section below on the custom field type.
+
+The Hard Way:
+    If a client needs something specialized, you may need to edit index.phtml
+    Look for the drawtool_form, and use the data-tool attribute to disambiguate, e.g. drawtool_form with data-tool="polygon"
+    As the PHP code iterates over $form_fields you can put in custom code, like this:
+        <?php if ($form_field['fieldname'] == 'levgov') { ?>
+        specialized HTML in here
+        <?php } ?>
+
+    Tip: Once you start down the dark path, forever will it dominate your destiny.
+    You may even need to throw out the whole $form_fields iteration and write your HTML by hand.
+
+Field Templates and the "custom" Field Type:
+
+    The default templates for the supported input types are here:
+        application/views/site/editform/LAYERTYPE/FIELDTYPE.phtml
+    Feel free to modify these, but keep in mind that they're global to the data type:
+    an edit to polygons/textarea.phtml would affect all textarea input in the polygon attribute editing form.
+
+    The custom input type will load a custom template, with the name contrived as:
+        application/views/site/editform/LAYERTYPE/custom_FIELDNAME.phtml
+        e.g.
+        application/views/site/editform/lines/custom_landvalue.phtml
+    This being plain ol' HTML, feel free to get hacking. Just keep in mind the behaviors and expectations,
+    same as you would for your other field edits.
+
+Important notes about magical behavior and expectations:
+
+    - In the config.php "form_fields" setting make sure the "fieldname" attributes are named precisely as
+        in the data table (core_points, core_polygons, etc.) You can edit these tables in the database in the usual
+        fashions, e.g. PgAdmin, ALTER TABLE commands via CLI.
+        Just be sure that you have the minimum fields if you trash them and reload them, e.g. via shp2pgsql
+
+    - The name and description fields really should be left as "required" since they're pretty key. For example, they're used
+        to compose the default "reply" when soeone posts a submission using a prior submission as their starting point.
+        If your submissions don't need a name and description, you should really ask why not.
+
+    - The submitted_name and submitted_email and submitted_org fields are hardcoded and are always required.
+        Well, until you modify save_edit() and the HTML.
+        But really, think twice about whether that's a good idea.
+
+    - Validation of the fields is done in two parts:
+        - The config.php "form_fields" specifies some trivial validation, e.g. "required" or "email"
+        - The save_edit() method in controllers/site.php can be modified to include more involved validation.
+
+    - When a submission is selected as the starting point for a new submission, the old submission's name and description and date
+        are added together to form part of the new submission's description. This forms a starting point for the user to discuss why
+        they're editing an edit, for example. To change what fields are used and how, see index.js and look for loadToolFromFeature()
+        and the reference to the textarea 'textarea[name="description]'
+
+    - The form will be submitted as-is to the save_edit() endpoint in controllers/site.php, except that it will have two additional form data:
+        - type    indicating the datatype being saved, e.g. note, point, line, polygon.
+        - wkts    a pipe-joined list of WKT geometries, if they are drawn
+
+Other notes and tips:
+
+    THE FOLLOWING FIELDS ARE RESERVED and should not be in the editing UI, nor treated as editable fields. They will be removed from the POST input before being saved.
+        id
+        geom
+        status
+
+    Some field types are very particular, e.g. a NULL submitted for a date field would become a '' whichy throws a DB error.
+    You'll want to set defaults in the HTML, defaults in the database, and perhaps put some special handling into save_edit()
+
+    See also the Contributions page of the administration UI, where these fields are displayed.
+    You may want to change what fields are displayed, both in the table and in the "more info" popup.
+    This is all handled in the 3 files views/administration/contributions.[css|js|phtml]
+    and also in the contributions_ajax() endpoint in controllers/administration.php
+
+
+***** HOWTO: Configure the click-query behavior (WMS GetFatureInfo and popup windows) for context layer features
+
+This is done via config.php Find the context_layers section, and adjust the 'clickquery' setting for the layer in question. Quite simply, this toggles whether the UI will respond to clicks and will add a WMS GetFeatureInfo event handler when the map is clicked and this layer is visible.
+
+The info query is done via WMS GetFeatureInfo, using wms/context.map, the TEMPLATE directive, and the corresponding HTML template under wms/clickquery. The returned HTML is simply used as-is and placed inside a popup bubble.
+
+If you need to do postprocessing on the bubble content, such as hiding fields, creating charts, etc. then see the postprocessPopupBubble() function. This is passed the name of the layer (e.g. "points" or "schools") so you may process the bubble content using jQuery however you like.
+
+
+
+***** HOWTO: Configure the click-query behavior (WMS GetFatureInfo and popup windows) for core dataset features
+
+Start by reading up on the click-query behavior for context layer features, as described above. A click on the map behaves in the same way, using WMS GetFeatureInfo, an HTML template, a simple popup bubble, then the postprocessPopupBubble() function.
+
+The HTML template should include a link named "Edit this submission" or similar, following this format:
+    <a href="javascript:void(0);" id="edit_this_feature" data-type="polygon" data-id="[gid]">Start a new area based on this one</a>
+
+The default postprocessPopupBubble() function for the core layers, checks for the existence of #edit_this_feature and attaches an event handler to it. This event handler will use the data-type and data-id attributes, to fetch the shape and its past details and prepare it for editing as if it were a new submission.
+
+NOTE: Yes that's [gid] even though it gets the value of the "id" field. MapServer is broken and replaces the "id" field; just use [gid] and know that it's really the "id" field.

@@ -1,0 +1,81 @@
+<? $this->load->view('administration/header.phtml') ?>
+
+<h1>
+    <?php if ($user->id) { ?>
+    Editing User
+    <?php } else { ?>
+    Creating User
+    <?php } ?>
+</h1>
+
+<form action="<?= current_url() ?>" method="POST" id="editform">
+
+<div class="section">
+    <div class="col span_3_of_10">
+        Email
+    </div>
+    <div class="col span_7_of_10">
+        <input type="text" name="email" value="<?= htmlspecialchars($user->email) ?>" size="50" maxlength="50" />
+    </div>
+</div>
+<div class="section">
+    <div class="col span_3_of_10">
+        Real name
+    </div>
+    <div class="col span_7_of_10">
+        <input type="text" name="realname" value="<?= htmlspecialchars($user->realname) ?>" size="50" maxlength="50" />
+    </div>
+</div>
+<div class="section">
+    <div class="col span_3_of_10">
+        Organization
+    </div>
+    <div class="col span_7_of_10">
+        <input type="text" name="organization" value="<?= htmlspecialchars($user->organization) ?>" size="50" maxlength="50" />
+    </div>
+</div>
+<div class="section">
+    <div class="col span_3_of_10">
+        Password
+        <?php if ($user->id) { ?>
+        <br/>
+        <span style="font-size:75%">only if you want to change it</span>
+        <?php } ?>
+    </div>
+    <div class="col span_7_of_10">
+        <input type="text" name="password" /> <a href="javascript:void(0);" id="button_randompassword">generate</a>
+    </div>
+</div>
+<div class="section">
+    <div class="col span_3_of_10">
+        &nbsp;
+    </div>
+    <div class="col span_7_of_10">
+        <input type="submit" name="save" value="Save Changes" />
+    </div>
+</div>
+
+</form>
+
+
+<form action="<?= site_url('administration/user_delete') ?>" method="POST" onSubmit="return confirm('Really delete this user?');">
+    <input type="hidden" name="id" value="<?= $user->id ?>" />
+    <input type="submit" value="delete" />
+</form>
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#button_randompassword').click(function () {
+        // generate a random password and fill it in
+        var length = 10;
+        var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var output = '';
+        for (var i=length; i>0; --i) output += chars[Math.round(Math.random() * (chars.length - 1))];
+        jQuery('#editform input[name="password"]').val(output);
+    });
+});
+</script>
+
+
+<? $this->load->view('administration/footer.phtml') ?>

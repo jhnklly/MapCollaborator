@@ -1,0 +1,8 @@
+<?= $label ?><br/>
+<input
+    type="text"
+    name="<?= $fieldname ?>"
+    placeholder="<?= htmlspecialchars($placeholder) ?>"
+    <?php if ($required) printf('data-required="%s"', htmlspecialchars($required) ); ?>
+    <?php if ($default)  printf('value="%s"', htmlspecialchars($default) ); ?>
+/><br/>

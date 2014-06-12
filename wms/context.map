@@ -1,0 +1,122 @@
+MAP
+
+#####################################################################################
+#
+# These are *the* point layer, line layer, and polygon layer used by the drawing and upload tools.
+# They are the layers that are the focus of MapCollaborator, the datasets up for collaboration.
+# You'll want to check config.php to configure which of these layers are visible in the UI and
+# are accessible to other functions such as click-querying.
+#
+# Legends:  The images for these layers in the layer-toggler legend, are hardcoded as being
+#           wms/legends/points.png
+#           wms/legends/lines.png
+#           wms/legends/polygons.png
+#           It's up to you to provide these images at whatever sizes look good to you.
+#####################################################################################
+
+
+LAYER
+    NAME "towns"
+    TYPE POLYGON
+
+    #CONNECTIONTYPE POSTGIS
+    #CONNECTION "user=myproject dbname=myproject password=abcdefgh12345678"
+    DATA "citybounds.shp"
+
+    #LABELITEM "NAME"
+
+    CLASS
+        STYLE
+            OUTLINECOLOR 180 0 180
+            COLOR 255 0 255
+        END
+
+        #LABEL
+        #    TYPE truetype
+        #    FONT "sans-italic"
+        #    SIZE 8
+        #    COLOR 0 0 255
+        #    MINFEATURESIZE 20
+        #    PARTIALS FALSE
+        #END
+    END
+
+    TOLERANCE 0
+    TEMPLATE "clickquery/towns.html"
+END
+
+
+
+
+LAYER
+    NAME "schools"
+    TYPE POINT
+
+    #CONNECTIONTYPE POSTGIS
+    #CONNECTION "user=myproject dbname=myproject password=abcdefgh12345678"
+    DATA "schools.shp"
+
+    LABELITEM "DISTRICT"
+
+    CLASS
+        STYLE
+            COLOR 0 0 0
+            SIZE 3
+        END
+
+        LABEL
+            TYPE truetype
+            FONT "sans-italic"
+            SIZE 8
+            COLOR 0 0 255
+            PARTIALS FALSE
+        END
+    END
+
+    TOLERANCE 18
+    TEMPLATE "clickquery/schools.html"
+END
+
+
+#####################################################################################
+#
+# these metadata and global configs, probably aren't anything you need to worry about
+#
+#####################################################################################
+
+
+NAME mapfile
+SIZE 256 256
+MAXSIZE 4096
+
+WEB 
+    METADATA
+        "wms_title"                     "wms_mapfile"
+        "wms_onlineresource"            "http://websites.greeninfo.org/cgi-bin/mapserv?map=/maps/ginbootstrap/wms/context.map&"
+        "wms_srs"                       "EPSG:3857 EPSG:900913 EPSG:4326"
+        "wms_enable_request"            "GetMap GetFeatureInfo"
+        "wms_feature_info_mime_type"    "text/html"
+    END
+END
+
+IMAGETYPE PNG24
+OUTPUTFORMAT
+    NAME png
+    DRIVER AGG/PNG
+    MIMETYPE "image/png"
+    IMAGEMODE RGBA
+    FORMATOPTION "TRANSPARENT=ON"
+    FORMATOPTION "INTERLACE=OFF"
+END
+
+
+PROJECTION
+    "init=epsg:4326"
+END
+
+SHAPEPATH ./data
+FONTSET fonts/fonts.txt
+
+
+
+END # Map File

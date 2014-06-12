@@ -1,0 +1,6 @@
+<?= $label ?><br/>
+<textarea
+    name="<?= $fieldname ?>"
+    placeholder="<?= htmlspecialchars($placeholder) ?>"
+    <?php if ($required) printf('data-required="%s"', htmlspecialchars($required) ); ?>
+><?php if ($default)  print htmlspecialchars($default); ?></textarea><br/>

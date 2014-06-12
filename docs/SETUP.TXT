@@ -1,0 +1,113 @@
+MapCollaborator NG2014
+TEMPLATE EDITION
+
+This MapCollaborator instance may be used as a template and instructions for
+starting up your own MapCollaborator instance for a client. Emphasis in design was placed
+on flexibility and configurability, based on lessons learned from the dozen-or-so MC instances
+using the older codebase.
+
+MapCollaborator NG2014 is based on GIN Bootstrap.
+
+* CodeIgniter, the web service framework for PHP, with starter behaviors including
+    login authentication, logout, and controller-level authorization
+* A starter database with PostGIS 2.0, and tables for storing vector features
+* DataMapper ORM, an object-oriented ORM which works well with CodeIgniter
+* jQuery and jQuery UI, which make all things possible
+
+All of these components are well documented at their own websites. Ask Google.
+
+Start by reading the SETUP.TXT file, which outlines steps to get started,
+and refer to the common tasks walkthrough in HOWTO.TXT
+
+
+1.
+Start by taking a copy of the files:
+    cp -rp /maps/mapcollaborator/template /maps/mapcollaborator/mapcollab_mynewapp
+
+2.
+Then take a copy of the database:
+
+    sudo su - postgres -c psql
+        CREATE USER mapcollab_mynewapp password 'abcdefgh12345678'; 
+        ALTER USER mapcollab_mynewapp SET search_path TO public,data;
+        CREATE DATABASE mapcollab_mynewapp TEMPLATE mapcollab_template OWNER mapcollab_mynewapp;
+        \c mapcollab_mynewapp
+        GRANT ALL on schema data to mapcollab_mynewapp;
+        ALTER TABLE spatial_ref_sys  OWNER TO mapcollab_mynewapp;
+        ALTER VIEW geography_columns OWNER TO mapcollab_mynewapp;
+        ALTER VIEW geometry_columns  OWNER TO mapcollab_mynewapp;
+        ALTER VIEW raster_columns    OWNER TO mapcollab_mynewapp;
+        ALTER VIEW raster_overviews  OWNER TO mapcollab_mynewapp;
+        \q
+
+3.
+Now get editing on these core items:
+    .htaccess
+        Edit the redirection path to have the proper URI for your application,
+        e.g. /mapcollaborator/mapcollab_mynewapp
+
+    application/config/config.php
+    application/config/database.php
+        Database connection settings, the title of this MapCollaborator, etc.
+        Start with the items at the top, that are clearly noted.
+
+    application/views/site/index.js
+    application/views/site/index.phtml
+    application/views/site/index.css
+        The core HTML/JS/CSS for the map page.
+
+    application/views/site/mapconstants.js
+        JavaScript global configuration, such as the starting view of the map and what basemap options should exist.
+
+    wms/core.map
+        This mapfile renders the core datasets, the points, lines, and polygons that are being collaborated.
+        Edit the CONNECTION strings to specify your username, dbname, and password.
+        Optionally, edit the COLOR, OUTLINECOLOR, and other stylistic components, uncomment LABEL blocks, etc.
+
+    wms/layers.map
+        This mapfile renders any additional datasets outside of those 3 core datasets,
+        e.g. reference layers such as parks, rivers, school markers, whatever.
+        The layer NAMEs or GROUPs in this mapfile must match up with the layers defined in $config['layers']
+        since the WMS layer name will be derived from the $config['layers'] settings,
+        and that WMS layer name will be used in checkboxes, opacity controls, etc.
+
+    README.TXT and TODO.TXT
+        README should be description of the project and/or client, any interesting tech notes.
+        TODO is a list of immediate to-do items and tasks, such as this list that you're hacking away at right now.
+
+4.
+Get hacking!
+    Now you're on your own.
+    Start by visiting the app and making sure that it basically works,
+    then check out config.php for more settings such as enabling/suppressing certain features and capabilities.
+
+    Some areas of particular interest:
+
+    - Login to the admin UI The default info is:
+        gin@greeninfo.org
+        greeninfo
+        I highly recommend you change this ASAP, creating a new manager account specific to this project.
+    - Edit config.php to enable/disable UI features and the core vector layers.
+    - Log in to the database, and check out the three "core dataset" tables:   points   lines   polygons
+        You will probably want to drop the data and then load new data using shp2pgsql to load features.
+        The starting data make a good example.
+        Tip:    These 3 tables are always in WGS84 (lonlat) coordinate system.
+        Tip:    For a smooth transition, set up the attribute columns first then use the -a flag to shp2pgsql
+                If you choose to use your own loader such as ogr2ogr, verify that the columns contain at least the core columns,
+                e.g. "name" and "description" since the program depends on these.
+    - The "zoomto" table in the database is a set of polygons, used to generate the content of the "pick a place by name"
+        selector in the Zoom To A Location component of the UI. See site.php zoomto() for full details.
+        If you do replace this content, be sure to have the "name" and "type" columns since these are used to sort and group the options,
+        and that the ID field is named "id" and not "gid" as shp2pgsql likes to name it.
+    - The templates application/views/site/clickquery* to define the generated HTML output
+        when someone performs a click-query on various features, both core and reference.
+    - WMS rendering, e.g. colors and line thickness,
+        is performed via MapServer and the two mapfiles under wms/
+    - The page layout including HTML, CSS, and JavaScript, are done via templates
+        in application/views/site
+    - Load up some shapefiles and/or PostGIS files and start in on context.map
+        This defines "context layers" which are not the editable core vector datasets, but
+        those layers providing additional information and context such as schools and admin boundaries.
+    - Please don't forget to update the README file.
+        It's a minor detail, but it helps to know what client/project is using this, esp if there are P: assets.
+

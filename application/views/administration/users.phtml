@@ -1,0 +1,37 @@
+<? $this->load->view('administration/header.phtml') ?>
+
+<div class="rightfloater">
+    <a href="<?= site_url('administration/user/0') ?>">+ New User</a><br/>
+</div>
+
+<table style="width:100%;" id="listing">
+    <thead>
+        <td class="bold"></td>
+        <td class="bold">Name</td>
+        <td class="bold">Organization</td>
+        <td class="bold">Email</td>
+        <td class="bold">Disabled?</td>
+        <td class="bold">Admin?</td>
+    </thead>
+    <tbody>
+    <?php foreach ($users as $user) { ?>
+    <tr>
+        <td><a href="<?= site_url("administration/user/{$user->id}") ?>">edit</a></td>
+        <td><?= htmlspecialchars($user->realname) ?></td>
+        <td><?= htmlspecialchars($user->organization) ?></td>
+        <td><?= htmlspecialchars($user->email) ?></td>
+        <td><?= $user->password == 'X' ? 'disabled' : '' ?></td>
+        <td><?= $user->admin == 't' ? 'admin' : '' ?></td>
+    </tr>
+    <?php } ?>
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#listing').dataTable();
+});
+</script>
+
+<? $this->load->view('administration/footer.phtml') ?>

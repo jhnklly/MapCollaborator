@@ -1,0 +1,81 @@
+#content {
+    min-height:100%;
+}
+
+#map {
+    width:100%;
+    height: 500px; /* is resizable too */
+}
+
+#tabs {
+    margin:0;
+}
+
+table.listing {
+    width:100%;
+}
+
+#content {
+    margin: 0;
+}
+
+div.alert {
+    color:red;
+    background-color:yellow;
+    font-weight:bold;
+}
+
+
+/* LEGEND */
+
+#dialog_legend {
+}
+#dialog_legend div.legend_block {
+}
+#dialog_legend img.legend_spinner {
+    display:none; /* will be shown in code, notably layers 'load' and 'loadstart' event handlers */
+}
+#dialog_legend div.legend_content {
+    display:none; /* shown when layer is toggled, notably layerOn() and layerOff() */
+}
+#dialog_legend span.legend_title {
+    cursor:pointer;
+    font-weight:bold;
+}
+#dialog_legend div.legend_content {
+    margin-left:25px;
+}
+
+#dialog_legend div.legend_slider {
+    width:200px;
+    height:5px;
+
+    margin-top:5px;
+    margin-bottom:5px;
+}
+#dialog_legend div.legend_slider .ui-slider-handle {
+    width:10px;
+    height:10px;
+}
+
+
+/* INFO DIALOG FOR SHOWING THE DETAILS OF THE SUBMISSION */
+#dialog_contribinfo {
+}
+div.contribinfo {
+    font-size:8pt;
+}
+div.contribinfo > div {
+    margin-bottom:1em;
+}
+
+
+/* STATUS FILTER and DOWNLOAD BUTTON kinda hacked into there */
+
+div.dataTables_length select[name="status"] {
+    margin-left:1in;
+}
+
+div.dataTables_length a.download_link {
+    margin-left:1in;
+}

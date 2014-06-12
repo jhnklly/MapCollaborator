@@ -1,0 +1,143 @@
+MAP
+
+#################################################################################################################
+# These form the highlights for the core data types defined in core.map
+# They're broken off into this separate mapfile simply to keep both mapfiles lean and comprehensible,
+# since highlights tend to have less scale-dependency and status-dependency, elss filtering, etc.
+#################################################################################################################
+
+LAYER
+    NAME "highlight_notes"
+    TYPE point
+
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=mapcollab_template dbname=mapcollab_template password=abcdefgh12345678"
+    DATA "geom from core_notes using unique id using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+
+    FILTER "id=%ID%"
+    VALIDATION
+        "ID" "^[0-9]+$"
+    END
+
+    CLASS
+        STYLE
+            SYMBOL "notes-highlight"
+        END
+    END
+END
+
+
+LAYER
+    NAME "highlight_points"
+    TYPE POINT
+
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=mapcollab_template dbname=mapcollab_template password=abcdefgh12345678"
+    DATA "geom from core_points using unique id using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+
+    FILTER "id=%ID%"
+    VALIDATION
+        "ID" "^[0-9]+$"
+    END
+
+    CLASS
+        STYLE
+            COLOR 255 0 0
+            SIZE 16
+        END
+    END
+END
+
+
+LAYER
+    NAME "highlight_lines"
+    TYPE LINE
+
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=mapcollab_template dbname=mapcollab_template password=abcdefgh12345678"
+    DATA "geom from core_lines using unique id using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+
+    FILTER "id=%ID%"
+    VALIDATION
+        "ID" "^[0-9]+$"
+    END
+
+    CLASS
+        STYLE
+            COLOR 255 0 0
+            WIDTH 9
+        END
+    END
+END
+
+
+LAYER
+    NAME "highlight_polygons"
+    TYPE POLYGON
+
+    FILTER "id=%ID%"
+    VALIDATION
+        "ID" "^[0-9]+$"
+    END
+
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=mapcollab_template dbname=mapcollab_template password=abcdefgh12345678"
+    DATA "geom from core_polygons using unique id using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+
+    CLASS
+        STYLE
+            OUTLINECOLOR 255 0 0
+            WIDTH 6
+        END
+    END
+END
+
+
+#####################################################################################
+#
+# these metadata and global configs, probably aren't anything you need to worry about
+#
+#####################################################################################
+
+SIZE 256 256
+MAXSIZE 4096
+
+WEB 
+    METADATA
+        "wms_title"          "mapcollaborator_datasets"
+        "wms_onlineresource" "http://websites.greeninfo.org/cgi-bin/mapserv?map=/maps/mapcollaborator/template/core.map&"
+        "wms_srs"            "EPSG:3857 EPSG:900913 EPSG:4326"
+        "wms_feature_info_mime_type"    "text/html"
+    END
+END
+
+IMAGETYPE PNG24
+OUTPUTFORMAT
+    NAME png
+    DRIVER AGG/PNG
+    MIMETYPE "image/png"
+    IMAGEMODE RGBA
+    FORMATOPTION "TRANSPARENT=ON"
+    FORMATOPTION "INTERLACE=OFF"
+END
+
+
+PROJECTION
+    "init=epsg:4326"
+END
+
+SHAPEPATH ./data
+FONTSET fonts/fonts.txt
+
+
+SYMBOL
+    NAME  "notes-highlight"
+    IMAGE "legends/core-notes-highlight.png"
+    TYPE  pixmap
+END
+
+END # Map File

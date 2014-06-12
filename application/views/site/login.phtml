@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title><?= htmlspecialchars($htmltitle) ?></title>
+
+    <!-- a simple responsive grid system for the map page -->
+    <link rel="stylesheet" href="<?= site_url('application/views/site/grid/css/col.css') ?>" media="all">
+    <link rel="stylesheet" href="<?= site_url('application/views/site/grid/css/10cols.css') ?>" media="all">
+
+    <!-- jQuery and jQuery UI -->
+<!--
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/<?= $jqueryui_theme ?>/jquery-ui.css">
+-->
+
+    <!-- sitewide common CSS -->
+    <link rel="stylesheet" href="<?= site_url('application/views/site/header.css') ?>" media="all">
+</head>
+<body>
+
+
+
+<div style="text-align:center;">
+    <h2><?= $htmltitle ?></h2>
+
+    <form action="<?= current_url() ?>" method="post">
+    <table style="margin:0 auto;">
+        <tr>
+            <td>E-mail address:</td>
+            <td><input type="text" name="email" placeholder="email address" size="50" maxlength="50" /></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" name="password" placeholder="password" size="50" maxlength="50" /></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td class="left"><input type="submit" value="Log In" /></td>
+        </tr>
+    </table>
+    </form>
+
+    <br/>
+    <a href="<?= site_url('site/forgot') ?>">Forgot your password?</a>
+    <?php if ($allow_registration) { ?>
+    <br/>
+    <br/>
+    <a href="<?= site_url('site/signup') ?>">Register to contribute</a>
+    <br/>
+    <?php } ?>
+</div>
+
+
+
+
+</body>
+</html>

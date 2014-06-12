@@ -1,0 +1,9 @@
+<?= $label ?><br/>
+<select
+    name="<?= $fieldname ?>"
+    <?php if ($required) printf('data-required="%s"', htmlspecialchars($required) ); ?>
+>
+<?php foreach ($options as $optval=>$opttxt) { ?>
+<option value="<?= htmlspecialchars($optval) ?>" <?php if ($optval===$default) print "selected"; ?> ><?= $opttxt ?></option>
+<?php } ?>
+</select><br/>

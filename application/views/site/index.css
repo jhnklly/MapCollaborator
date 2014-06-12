@@ -1,0 +1,212 @@
+/*
+ * GENERAL PAGE LAYOUT / HEADER / FOOTER
+ * Tips:
+ * HEADER & FOOTER
+ * - the grid for the header (top row), footer (bottom row), and map and sidebars (center row) uses CSS classes
+ *      such as span_3_of_10 plus a span_7_of_10 to achieve a total of 10 10ths
+ *      if you mess with #leftsidebar and #rightsidebar you will probably also need to mess with #map so it totals up to 10
+ *      e.g. set them to display:none, empty their HTML content, then adjust #map to span_10_of_10
+ * - the height of #map   #leftsidebar  #rightsidebar
+ *      uses calc() to achieve 100% minus the height of #header and #footer
+ *      if you change the height of either, or make the footer display:none you will surely need to revisit the minus amount
+ * - #footer achieves vertical centering by having its line-height same as its height
+ *      likewise #header_lhs and #header have line-height contrived to vertically center the text
+ *      if you change the height of these, also change this line-height
+ * - #header_lhs may need the font-size adjusted depending on the length of your title
+ * - #leftsidebar and #rightsidebar may be hidden or deleted
+ *      these form a "10 of 10" row along with #map so you'll want to check the span_XX_of_10 settings in HTML if you omit or enable either sidebar
+ * - the opacity sliders #dialog_legend .legend_slider have their width hardcoded here in CSS, presuming a known width for #dialog_legend
+ *      if you change that width you may want to check out the widths of the sliders
+ */
+
+body {
+    padding: 0;
+    margin: 0;
+    overflow:hidden;
+}
+html, body, #mainwrapper {
+    height: 100%;
+
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#map,#leftsidebar,#rightsidebar {
+    height: 500px; /** older browsers pre-IE9 **/ 
+    height: -webkit-calc(100% - 117px); /** Safari 6, Chrome 19-25 **/
+    height: -moz-calc(100% - 117px); /** FF 4-15  **/
+    height: calc(100% - 117px); /** FF 16+, IE 9+, Opera 15, Chrome 26+, Safari 7 and future other browsers **/
+}
+#leftsidebar,#rightsidebar {
+    overflow:scroll;
+}
+#leftsidebar {
+    /* display:none; */ /* if you hide this, see the notes above about the grid and #map */
+}
+#rightsidebar {
+    /* display:none; */ /* if you hide this, see the notes above about the grid and #map */
+}
+
+#header, #header > div {
+    height:78px;
+}
+#header_lhs {
+    background-color:#e09526;
+
+    line-height:85px;
+
+    color:white;
+    font-size:45px;
+}
+#header_rhs {
+    background-color:#507383;
+
+    position:relative;
+}
+
+#loginbar {
+    position:absolute;
+    top:5px;
+    right:83px;
+}
+
+#loginbar a {
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+#loginbar a:hover {
+    text-decoration:underline;
+}
+
+#footer {
+    height:41px;
+    line-height:41px;
+
+    text-align:center;
+
+    /* display:none; */ /* if you hide this, see the notes above about height calc() */
+}
+
+
+/* MAP AND BUSY CURSOR   less obtrusive than the Please Wait box but still indicates to chill out a moment */
+
+#map {
+    cursor:crosshair;
+}
+#map.busy {
+    cursor: wait;
+}
+
+
+
+/* ONE MOMENT PLEASE */
+
+#dialog_waiting {
+    text-align:center;
+}
+
+
+/* THE SETTINGS / CONTROLS ACCORDION */
+#dialog_accordion {
+    padding:0;
+}
+
+#dialog_accordion h1 {
+    font-size:12pt;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    border-top: 1px solid #DDDDDD;
+
+    background-color:#507383;
+    color:#eeeeee;
+
+    padding-left:1.5em;
+    margin:0;
+
+    background-image:url(images/accordion_collapsed.png);
+    background-repeat:no-repeat;
+    background-position:5px 4px;
+}
+#dialog_accordion h1.accordion_active {
+    background-color:#507383;
+    color:#eeeeee;
+
+    background-image:url(images/accordion_expanded.png);
+}
+
+#dialog_accordion > div {
+    display:none; /* displayed via code; see accordionOpen() et al */
+
+    font-size:8pt;
+    padding:0 1em 1em 1em;
+}
+
+#dialog_accordion span.geocode_zoomto_link {
+    cursor:pointer;
+
+    padding-right:1em;
+    padding-left:1em;
+
+    border-right:1px solid #CCCCCC;
+}
+#dialog_accordion span.geocode_zoomto_link:last-child {
+    border-right:0 none transparent;
+}
+#dialog_accordion span.geocode_zoomto_link_active {
+    font-weight:bold;
+}
+#dialog_accordion select.geocode_zoomto {
+    width:99%;
+    display:none; /* shown in code when .geocode_zoomto_link is clicked; see initAccordion() */
+}
+
+#dialog_accordion form.drawtool_form {
+    display:none; /* made visible in code, see the startTool() family of functions */
+}
+#dialog_accordion form.drawtool_button {
+}
+
+/* THE LAYER-TOGGLE and OPACITY LEGEND */
+
+#dialog_legend {
+}
+#dialog_legend div.legend_block {
+}
+#dialog_legend img.legend_spinner {
+    display:none; /* will be shown in code, notably layers 'load' and 'loadstart' event handlers */
+}
+#dialog_legend div.legend_content {
+    display:none; /* shown when layer is toggled, notably layerOn() and layerOff() */
+}
+#dialog_legend span.legend_title {
+    cursor:pointer;
+    font-weight:bold;
+}
+#dialog_legend div.legend_content {
+    margin-left:25px;
+}
+
+#dialog_legend div.legend_slider {
+    width:200px;
+    height:5px;
+
+    margin-top:5px;
+    margin-bottom:5px;
+}
+#dialog_legend div.legend_slider .ui-slider-handle {
+    width:10px;
+    height:10px;
+}
+
+
+/* THE DRAW TOOLS used for editing text for submitting edits or comments on edits */
+
+form.drawtool_form input[type="text"],select {
+    width:95%;
+}
+form.drawtool_form textarea {
+    width:95%;
+    height:1.5in;
+}

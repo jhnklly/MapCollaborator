@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title><?= htmlspecialchars($htmltitle) ?></title>
+
+    <!-- a simple responsive grid system for the map page -->
+    <link rel="stylesheet" href="<?= site_url('application/views/site/grid/css/col.css') ?>" media="all">
+    <link rel="stylesheet" href="<?= site_url('application/views/site/grid/css/10cols.css') ?>" media="all">
+
+    <!-- jQuery and jQuery UI -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/<?= $jqueryui_theme ?>/jquery-ui.css">
+
+    <!-- the wonderful ajaxForm plugin -->
+    <script src="http://malsup.github.com/jquery.form.js"></script> 
+
+    <!-- DataTables the successor to tablesorter -->
+    <script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.min.js"></script> 
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css">
+
+    <!-- global styles for the whole admin UI -->
+    <link rel="stylesheet" href="<?= site_url('application/views/administration/header.css') ?>" media="all">
+</head>
+<body>
+
+<div class="section" id="navbar">
+    <div class="col span_2_of_10 left"><a href="<?= site_url('site/') ?>" title="See the front-facing MapCollaborator, and submit your own edits"> &nbsp; MapCollaborator</a></div>
+    <div class="col span_2_of_10 left"><a href="<?= site_url('administration/users') ?>" title="Manage user accounts, such as creating new managers"> &nbsp; Collaborators</a></div>
+    <div class="col span_2_of_10 left"><a href="<?= site_url('administration/contributions') ?>" title="See contributed drawings, uploads, and notes"> &nbsp; Contributions</a></div>
+    <div class="col span_4_of_10 right"><a href="<?= site_url('site/logout') ?>" title="Log out from the system">Log Out &nbsp; </a></div>
+</div>
+
+<div id="content">

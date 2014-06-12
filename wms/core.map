@@ -1,0 +1,241 @@
+MAP
+
+#################################################################################################################
+#
+# These are *the* point layer, line layer, and polygon layer used by the drawing and upload tools.
+# They are the layers that are the focus of MapCollaborator, the datasets up for collaboration.
+# You'll want to check config.php to configure which of these layers are visible in the UI and
+# are accessible to other functions such as click-querying.
+#
+# Legends:  The images for these layers in the layer-toggler legend, are hardcoded as being a trio of Accepted, Declined, Pending
+#           wms/legends/core-points-apporoved.png
+#           wms/legends/core-lines-declined.png
+#           wms/legends/core-polygons-pending.png
+#
+# Click query templates: There are 2 click-query templates  The first is WMS GetFeatureInfo and uses a HTML template under wms/templates
+#           The second is for More Info and is done via a PHP endpoint to fetch the full information.
+#           This is done in 2 steps since the second is significantly more time-consuming, transferring WKT payload and all.
+#################################################################################################################
+
+LAYER
+    NAME "notes"
+    TYPE point
+
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=mapcollab_template dbname=mapcollab_template password=abcdefgh12345678"
+    DATA "geom from (SELECT *, id AS gid FROM core_notes) AS table_with_fake_gid using unique gid using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+
+    FILTER "status IN (%STATUS%)"
+    VALIDATION
+        "STATUS" "^[A-Za-z]+$"
+    END
+
+    CLASSITEM "status"
+    CLASS
+        EXPRESSION "Accepted"
+        STYLE
+            SYMBOL "notes-accepted"
+        END
+    END
+    CLASS
+        EXPRESSION "Declined"
+        STYLE
+            SYMBOL "notes-declined"
+        END
+    END
+    CLASS
+        EXPRESSION "Pending"
+        STYLE
+            SYMBOL "notes-pending"
+        END
+    END
+
+    TEMPLATE "clickquery/notes.html"
+    TOLERANCE 15
+END
+
+
+LAYER
+    NAME "points"
+    TYPE POINT
+
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=mapcollab_template dbname=mapcollab_template password=abcdefgh12345678"
+    DATA "geom from (SELECT *, id AS gid FROM core_points) AS table_with_fake_gid using unique gid using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+
+    FILTER "status IN (%STATUS%)"
+    VALIDATION
+        "STATUS" "^[A-Za-z]+$"
+    END
+
+    CLASSITEM "status"
+    CLASS
+        EXPRESSION "Accepted"
+        STYLE
+            COLOR 36 170 80
+            SIZE 10
+        END
+    END
+    CLASS
+        EXPRESSION "Declined"
+        STYLE
+            COLOR 153 53 69
+            SIZE 10
+        END
+    END
+    CLASS
+        EXPRESSION "Pending"
+        STYLE
+            COLOR 80 115 131
+            SIZE 10
+        END
+    END
+
+    TEMPLATE "clickquery/points.html"
+    TOLERANCE 15
+END
+
+
+LAYER
+    NAME "lines"
+    TYPE LINE
+
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=mapcollab_template dbname=mapcollab_template password=abcdefgh12345678"
+    DATA "geom from (SELECT *, id AS gid FROM core_lines) AS table_with_fake_gid using unique gid using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+
+    FILTER "status IN (%STATUS%)"
+    VALIDATION
+        "STATUS" "^[A-Za-z]+$"
+    END
+
+    CLASSITEM "status"
+    CLASS
+        EXPRESSION "Accepted"
+        STYLE
+            COLOR 36 170 80
+            WIDTH 5
+        END
+    END
+    CLASS
+        EXPRESSION "Declined"
+        STYLE
+            COLOR 153 53 69
+            WIDTH 5
+        END
+    END
+    CLASS
+        EXPRESSION "Pending"
+        STYLE
+            COLOR 80 115 131
+            WIDTH 5
+        END
+    END
+
+    TEMPLATE "clickquery/lines.html"
+    TOLERANCE 15
+END
+
+
+LAYER
+    NAME "polygons"
+    TYPE POLYGON
+
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=mapcollab_template dbname=mapcollab_template password=abcdefgh12345678"
+    DATA "geom from (SELECT *, id AS gid FROM core_polygons) AS table_with_fake_gid using unique gid using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+
+    FILTER "status IN (%STATUS%)"
+    VALIDATION
+        "STATUS" "^[A-Za-z]+$"
+    END
+
+    CLASSITEM "status"
+    CLASS
+        EXPRESSION "Accepted"
+        STYLE
+            OUTLINECOLOR 6 140 50
+            COLOR 36 170 80
+            WIDTH 6
+        END
+    END
+    CLASS
+        EXPRESSION "Declined"
+        STYLE
+            OUTLINECOLOR 123 23 39
+            COLOR 153 53 69
+            WIDTH 6
+        END
+    END
+    CLASS
+        EXPRESSION "Pending"
+        STYLE
+            OUTLINECOLOR 50 85 101
+            COLOR 80 115 131
+            WIDTH 6
+        END
+    END
+
+    TEMPLATE "clickquery/polygons.html"
+    TOLERANCE 15
+END
+
+
+#####################################################################################
+#
+# these metadata and global configs, probably aren't anything you need to worry about
+#
+#####################################################################################
+
+SIZE 256 256
+MAXSIZE 4096
+
+WEB 
+    METADATA
+        "wms_title"          "mapcollaborator_datasets"
+        "wms_onlineresource" "http://websites.greeninfo.org/cgi-bin/mapserv?map=/maps/mapcollaborator/template/core.map&"
+        "wms_srs"            "EPSG:3857 EPSG:900913 EPSG:4326"
+        "wms_feature_info_mime_type"    "text/html"
+    END
+END
+
+IMAGETYPE PNG24
+OUTPUTFORMAT
+    NAME png
+    DRIVER AGG/PNG
+    MIMETYPE "image/png"
+    IMAGEMODE RGBA
+    FORMATOPTION "TRANSPARENT=ON"
+    FORMATOPTION "INTERLACE=OFF"
+END
+
+
+PROJECTION
+    "init=epsg:4326"
+END
+
+SHAPEPATH ./data
+FONTSET fonts/fonts.txt
+
+
+SYMBOL
+    NAME  "notes-accepted"
+    IMAGE "legends/core-notes-accepted.png"
+    TYPE  pixmap
+END
+SYMBOL
+    NAME  "notes-declined"
+    IMAGE "legends/core-notes-declined.png"
+    TYPE  pixmap
+END
+SYMBOL
+    NAME  "notes-pending"
+    IMAGE "legends/core-notes-pending.png"
+    TYPE  pixmap
+END
+
+END # Map File

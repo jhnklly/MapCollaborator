@@ -1,0 +1,10 @@
+***** Immediate and in-progress tasks and steps
+***** in the development of this project/instance.
+
+ICONS
+    left-hand set of buttons that toggle the dialogs
+    should be 26x26 but with a lot of white in them
+        http://www.mapcollaborator.org/template/application/views/site/images/button_accordion.png
+        http://www.mapcollaborator.org/template/application/views/site/images/button_legend.png
+        http://www.mapcollaborator.org/template/application/views/site/images/button_share.png
+

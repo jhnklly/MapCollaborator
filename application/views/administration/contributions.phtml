@@ -1,0 +1,358 @@
+<? $this->load->view('administration/header.phtml') ?>
+
+<!-- Leaflet, or rather Mapbox's extension of Leaflet which includes other cool plugins
+    https://www.mapbox.com/mapbox.js/api/v1.6.2/
+    sadly they didn't see fit to include Wicket for WKT I/O, in favor of omnivorse which only consumes...
+-->
+<script type="text/javascript" src="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"></script>
+<link href="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.2/Leaflet.fullscreen.min.js"></script>
+<link href="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.2/leaflet.fullscreen.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js"></script>
+<link href="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="<?= site_url('application/views/site/leaflet-wicket/wicket.js'); ?>"></script>
+<script type="text/javascript" src="<?= site_url('application/views/site/leaflet-wicket/wicket-leaflet.js'); ?>"></script>
+
+<!-- the wonderful ajaxForm plugin -->
+<script src="http://malsup.github.com/jquery.form.js"></script>
+
+<!-- data structures loaded from config, e.g. the layer configurations -->
+<script type="text/javascript">
+var BASE_URL       = <?= json_encode(site_url()) ?>;
+var CORE_LAYERS    = <?= json_encode($core_layers) ?>;
+var CONTEXT_LAYERS = <?= json_encode($context_layers) ?>;
+</script>
+
+<script type="text/javascript" src="<?= site_url('application/views/site/mapconstants.js'); ?>"></script>
+<script type="text/javascript" src="<?= site_url('application/views/administration/contributions.js') ?>"></script>
+    <link rel="stylesheet" type="text/css" href="<?= site_url('application/views/site/fixes.css'); ?>" />
+<link rel="stylesheet" type="text/css" href="<?= site_url('application/views/administration/contributions.css') ?>" />
+
+
+<div id="map"></div>
+
+
+<div id="tabs">
+    <ul>
+    <?php if ($core_layers['notes']['enabled']) { ?>
+    <li><a href="#tab-notes">Notes</a></li>
+    <?php } ?>
+    <?php if ($core_layers['points']['enabled']) { ?>
+    <li><a href="#tab-points">Points</a></li>
+    <?php } ?>
+    <?php if ($core_layers['lines']['enabled']) { ?>
+    <li><a href="#tab-lines">Lines</a></li>
+    <?php } ?>
+    <?php if ($core_layers['polygons']['enabled']) { ?>
+    <li><a href="#tab-polygons">Polygons</a></li>
+    <?php } ?>
+    </ul>
+    <?php if ($core_layers['notes']['enabled']) { ?>
+    <div id="tab-notes">
+        <table class="listing" data-type="notes">
+            <thead>
+                <td class="bold">ID#</td>
+                <td class="bold">Status</td>
+                <td class="bold">Name</td>
+                <td class="bold">Organization</td>
+                <td class="bold">Date</td>
+                <td class="bold">Title</td>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <?php } ?>
+    <?php if ($core_layers['points']['enabled']) { ?>
+    <div id="tab-points">
+        <table class="listing" data-type="points">
+            <thead>
+                <td class="bold">ID#</td>
+                <td class="bold">Status</td>
+                <td class="bold">Name</td>
+                <td class="bold">Organization</td>
+                <td class="bold">Date</td>
+                <td class="bold">Title</td>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <?php } ?>
+    <?php if ($core_layers['lines']['enabled']) { ?>
+    <div id="tab-lines">
+        <table class="listing" data-type="lines">
+            <thead>
+                <td class="bold">ID#</td>
+                <td class="bold">Status</td>
+                <td class="bold">Name</td>
+                <td class="bold">Organization</td>
+                <td class="bold">Date</td>
+                <td class="bold">Title</td>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <?php } ?>
+    <?php if ($core_layers['polygons']['enabled']) { ?>
+    <div id="tab-polygons">
+        <table class="listing" data-type="polygons">
+            <thead>
+                <td class="bold">ID#</td>
+                <td class="bold">Status</td>
+                <td class="bold">Name</td>
+                <td class="bold">Organization</td>
+                <td class="bold">Date</td>
+                <td class="bold">Title</td>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <?php } ?>
+</div>
+
+
+
+
+<div class="dialog" id="dialog_legend">
+    <!--
+    THE CORE LAYERS
+    AT THIS TIME IDENTICAL TO THE CONTEXT LAYERS, BUT THAT MAY CHANGE SO THE HARD DISTINCTION IS ESTABLISHED HERE
+    -->
+    <?php if ($core_layers['notes']['enabled']) { ?>
+        <div class="legend_block" data-layer="notes">
+            <label>
+                <?= form_checkbox('layers[]', "notes", $core_layers['notes']['onbydefault']) ?>
+                <span class="legend_title" title="<?= htmlspecialchars($core_layers['notes']['tooltip']) ?>"><?= htmlspecialchars($core_layers['notes']['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $core_layers['notes']['opacity'] ?>"></div>
+                <label><input type="checkbox" name="status[]" value="Accepted" checked /><img src="<?= site_url('wms/legends/core-notes-accepted.png') ?>" /> Accepted</label><br/>
+                <label><input type="checkbox" name="status[]" value="Declined" checked /><img src="<?= site_url('wms/legends/core-notes-declined.png') ?>" /> Declined</label><br/>
+                <label><input type="checkbox" name="status[]" value="Pending" checked /><img src="<?= site_url('wms/legends/core-notes-pending.png') ?>" /> Pending</label><br/>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if ($core_layers['points']['enabled']) { ?>
+        <div class="legend_block" data-layer="points">
+            <label>
+                <?= form_checkbox('layers[]', "points", $core_layers['points']['onbydefault']) ?>
+                <span class="legend_title" title="<?= htmlspecialchars($core_layers['points']['tooltip']) ?>"><?= htmlspecialchars($core_layers['points']['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $core_layers['points']['opacity'] ?>"></div>
+                <label><input type="checkbox" name="status[]" value="Accepted" checked /><img src="<?= site_url('wms/legends/core-points-accepted.png') ?>" /> Accepted</label><br/>
+                <label><input type="checkbox" name="status[]" value="Declined" checked /><img src="<?= site_url('wms/legends/core-points-declined.png') ?>" /> Declined</label><br/>
+                <label><input type="checkbox" name="status[]" value="Pending" checked /><img src="<?= site_url('wms/legends/core-points-pending.png') ?>" /> Pending</label><br/>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if ($core_layers['lines']['enabled']) { ?>
+        <div class="legend_block" data-layer="lines">
+            <label>
+                <?= form_checkbox('layers[]', "lines", $core_layers['lines']['onbydefault']) ?>
+                <span class="legend_title" title="<?= htmlspecialchars($core_layers['points']['tooltip']) ?>"><?= htmlspecialchars($core_layers['lines']['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $core_layers['lines']['opacity'] ?>"></div>
+                <label><input type="checkbox" name="status[]" value="Accepted" checked /><img src="<?= site_url('wms/legends/core-lines-accepted.png') ?>" /> Accepted</label><br/>
+                <label><input type="checkbox" name="status[]" value="Declined" checked /><img src="<?= site_url('wms/legends/core-lines-declined.png') ?>" /> Declined</label><br/>
+                <label><input type="checkbox" name="status[]" value="Pending" checked /><img src="<?= site_url('wms/legends/core-lines-pending.png') ?>" /> Pending</label><br/>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if ($core_layers['polygons']['enabled']) { ?>
+        <div class="legend_block" data-layer="polygons">
+            <label>
+                <?= form_checkbox('layers[]', "polygons", $core_layers['polygons']['onbydefault']) ?>
+                <span class="legend_title" title="<?= htmlspecialchars($core_layers['points']['tooltip']) ?>"><?= htmlspecialchars($core_layers['polygons']['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $core_layers['polygons']['opacity'] ?>"></div>
+                <label><input type="checkbox" name="status[]" value="Accepted" checked /><img src="<?= site_url('wms/legends/core-polygons-accepted.png') ?>" /> Accepted</label><br/>
+                <label><input type="checkbox" name="status[]" value="Declined" checked /><img src="<?= site_url('wms/legends/core-polygons-declined.png') ?>" /> Declined</label><br/>
+                <label><input type="checkbox" name="status[]" value="Pending" checked /><img src="<?= site_url('wms/legends/core-polygons-pending.png') ?>" /> Pending</label><br/>
+            </div>
+        </div>
+    <?php } ?>
+
+    <!--
+    THE CONTEXT LAYERS
+    AT THIS TIME IDENTICAL TO THE CORE LAYERS, BUT THAT MAY CHANGE SO THE HARD DISTINCTION IS ESTABLISHED HERE
+    -->
+    <?php foreach ($context_layers as $layer) { ?>
+        <div class="legend_block" data-layer="<?= $layer['wmslayer'] ?>">
+            <label>
+                <?= form_checkbox('layers[]', $layer['wmslayer'], $layer['onbydefault']) ?>
+                <?php if ($layer['tinylegend']) { ?>
+                    <img src="<?= site_url("wms/legends/{$layer['wmslayer']}.png") ?>" />
+                <?php } ?>
+                <span class="legend_title" title="<?= htmlspecialchars($layer['tooltip']) ?>"> <?= htmlspecialchars($layer['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $layer['opacity'] ?>"></div>
+                <?php if (! $layer['tinylegend']) { ?>
+                    <img src="<?= site_url("wms/legends/{$layer['wmslayer']}.png") ?>" />
+                <?php } ?>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+
+
+
+<div class="dialog" id="dialog_waiting">
+    <br/>
+    One moment please
+</div>
+
+
+
+<div class="dialog" id="dialog_download" title="Download Ready">
+    <div style="text-align:center;">
+        <br/>
+        Your download is ready.
+        <br/>
+        <br/>
+        <a href="about:blank" target="_blank">Click here to download</a>
+    </div>
+</div>
+
+
+
+<!--
+the subDIVs in this popup dialog, are toggled and populated via bringUpInfoOnSubmission()
+fields to be populated from the feature should follow this API:
+    <span data-field="FIELDNAME"></span>
+The received info from bringUpInfoOnSubmission() will iterate over the field data from the server, and look for the corresponding SPAN element for that FIELDNAME
+As such, this display/layout should require little/no adjustment to the program code in bringUpInfoOnSubmission()
+-->
+<div class="dialog" id="dialog_contribinfo" title="Submission Details">
+    <div class="contribinfo" data-type="notes">
+        <div style="font-weight:bold;">
+            Review status: <span data-field="status"></span>
+        </div>
+
+        <div>
+            <b><span data-field="name"></span></b>
+            <br/>
+            <div>
+                <span data-field="description"></span>
+            </div>
+        </div>
+
+        <div>
+            Submitted <span data-field="submitted_when"></span> by:<br/>
+            <span data-field="submitted_name"></span>
+            <span data-field="submitted_org"></span>
+            <span data-field="submitted_email"></span>
+        </div>
+    </div>
+    <div class="contribinfo" data-type="points">
+        <div style="font-weight:bold;">
+            Review status: <span data-field="status"></span>
+        </div>
+
+        <div>
+            <b><span data-field="name"></span></b>
+            <br/>
+            <div>
+                <span data-field="description"></span>
+            </div>
+        </div>
+
+        <div>
+            Submitted <span data-field="submitted_when"></span> by:<br/>
+            <span data-field="submitted_name"></span>
+            <span data-field="submitted_org"></span>
+            <span data-field="submitted_email"></span>
+        </div>
+    </div>
+    <div class="contribinfo" data-type="lines">
+        <div style="font-weight:bold;">
+            Review status: <span data-field="status"></span>
+        </div>
+
+        <div>
+            <b><span data-field="name"></span></b>
+            <br/>
+            <div>
+                <span data-field="description"></span>
+            </div>
+        </div>
+
+        <div>
+            Submitted <span data-field="submitted_when"></span> by:<br/>
+            <span data-field="submitted_name"></span>
+            <span data-field="submitted_org"></span>
+            <span data-field="submitted_email"></span>
+        </div>
+    </div>
+    <div class="contribinfo" data-type="polygons">
+        <div style="font-weight:bold;">
+            Review status: <span data-field="status"></span>
+        </div>
+
+        <div>
+            <b><span data-field="name"></span></b>
+            <br/>
+            <div>
+                <span data-field="description"></span>
+            </div>
+        </div>
+
+        <div>
+            Submitted <span data-field="submitted_when"></span> by:<br/>
+            <span data-field="submitted_name"></span>
+            <span data-field="submitted_org"></span>
+            <span data-field="submitted_email"></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="dialog" id="dialog_contribstatus" title="Submission Details">
+<form>
+
+    <input type="hidden" name="type" value="" />
+    <input type="hidden" name="id"   value="" />
+
+    Change status to:<br/>
+    <select name="status" style="width:5in;">
+        <option value="Pending">Pending</option>
+        <option value="Accepted">Accepted</option>
+        <option value="Declined">Declined</option>
+    </select>
+    <br/>
+    <div class="alert" id="contribstatus_warning">This submission has already been reviewed and <span id="contribstatus_warning_status"></span>.<br/>Are you sure you want to change it?</div>
+
+    <br/>
+
+    Enter a brief message thanking them or explaining what's interesting.<br/>
+    This will be wrapped in some boilerplate text explaining<br/>whether the submission was accepted or declined, so can be brief.<br/>
+    <textarea name="message" style="width:5in; height:2in;" placeholder="Thank you for your participation."></textarea>
+    <br/>
+
+</form>
+</div>
+
+
+<? $this->load->view('administration/footer.phtml') ?>

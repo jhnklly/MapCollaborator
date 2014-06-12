@@ -1,0 +1,52 @@
+html, body {
+    font-family: Helvetica,Arial,sans-serif;
+
+    margin:0;
+    padding:0;
+
+    font-size:8pt;
+}
+
+/*
+ * general page elements
+ */
+.right  { text-align:right; }
+.left   { text-align:left; }
+.center { text-align:center; }
+
+.bold { font-weight:bold; }
+
+
+/*
+ * I have no idea why the #navbar and #content need this crazy margin to place the navbar flush to the top of the page
+ * if you change the default font-size, you'll probably need to change this too
+ */
+#navbar {
+    height:2em; /* without this the #cpontent starts at the top of the page; very weird */
+}
+#navbar > div {
+    background-color:#E09526;
+}
+#navbar a {
+    color:#FFFFFF;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:16px;
+}
+#navbar a:hover {
+    text-decoration:underline;
+}
+
+#content {
+    margin: 0 1em 1em 1em;
+}
+
+
+div.rightfloater {
+    float:right;
+    clear:both;
+
+    text-align:right;
+
+    margin:1em 0 1em 1em;
+}

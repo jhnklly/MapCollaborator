@@ -1,0 +1,22 @@
+# route all requests that are NOT static files, through index.php to make the /nice/urls/ work
+# Tip: the URI here should be nice and short, since all MCs are intended to have a top-level domain such as
+#       http://www.mapcollaborator.org/template/
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /template/index.php?$1 [L]
+
+# disable file listings for directories; one must know the target filename
+Options -Indexes
+
+# disable the fetching of .phtml templates, because they are PHP code taken out of context
+# 99% of the time they will fail with missing functions and $this usage, but that 1% who knows what could happen...
+<Files ~ "\.phtml$">
+  Order allow,deny
+  Deny from all
+</Files>
+<Files ~ "\.map$">
+  Order allow,deny
+  Deny from all
+</Files>
+

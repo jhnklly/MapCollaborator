@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title><?= htmlspecialchars($htmltitle) ?></title>
+
+    <!-- a simple responsive grid system for the map page -->
+    <link rel="stylesheet" href="<?= site_url('application/views/site/grid/css/col.css') ?>" media="all">
+    <link rel="stylesheet" href="<?= site_url('application/views/site/grid/css/10cols.css') ?>" media="all">
+
+    <!-- Leaflet, or rather Mapbox's extension of Leaflet which includes other cool plugins
+        https://www.mapbox.com/mapbox.js/api/v1.6.2/
+        sadly they didn't see fit to include Wicket for WKT I/O, in favor of omnivorse which only consumes...
+    -->
+    <script type="text/javascript" src="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.2/Leaflet.fullscreen.min.js"></script>
+    <link href="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.2/leaflet.fullscreen.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js"></script>
+    <link href="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="<?= site_url('application/views/site/leaflet-wicket/wicket.js'); ?>"></script>
+    <script type="text/javascript" src="<?= site_url('application/views/site/leaflet-wicket/wicket-leaflet.js'); ?>"></script>
+
+    <!-- jQuery and jQuery UI -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/<?= $jqueryui_theme ?>/jquery-ui.css">
+
+    <!-- pURL an URL param string parser -->
+    <script type="text/javascript" src="<?= site_url('application/views/site/purl.js'); ?>"></script>
+
+    <!-- the wonderful ajaxForm plugin -->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <!-- the glue to bring it together -->
+    <script type="text/javascript" src="<?= site_url('application/views/site/mapconstants.js'); ?>"></script>
+    <link rel="stylesheet" type="text/css" href="<?= site_url('application/views/site/index.css'); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?= site_url('application/views/site/fixes.css'); ?>" />
+    <script type="text/javascript" src="<?= site_url('application/views/site/index.js'); ?>"></script>
+
+    <!-- data structures loaded from config, e.g. the layer configurations -->
+    <script type="text/javascript">
+    var BASE_URL       = <?= json_encode(site_url()) ?>;
+    var CORE_LAYERS    = <?= json_encode($core_layers) ?>;
+    var CONTEXT_LAYERS = <?= json_encode($context_layers) ?>;
+    </script>
+</head>
+<body>
+
+
+
+<div class="dialog" id="dialog_welcome" title="Welcome">
+    Welcome to <?= htmlspecialchars($sitename) ?>
+</div>
+
+
+
+<div id="mainwrapper">
+    <div id="header">
+        <div class="col span_3_of_10 center" id="header_lhs">
+            <?= $sitename ?>
+        </div>
+        <div class="col span_7_of_10 right" id="header_rhs">
+            <?php if ($userid) { ?>
+            <div id="loginbar">
+                <?php if ($useradmin) { ?>
+                    <a href="<?= site_url('administration') ?>">Admin</a>
+                    &nbsp;
+                <?php } ?>
+                <a href="<?= site_url('site/logout') ?>">Log Out</a>
+            </div>
+            <?php } ?>
+            <img src="<?= site_url('application/views/site/images/mapcollaborator.png') ?>" />
+        </div>
+    </div>
+    <span id="middle">
+        <div class="col span_1_of_10" id="leftsidebar">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In volutpat neque velit. Ut sit amet eros sollicitudin, lobortis ante pellentesque, pellentesque mauris. Curabitur eget pellentesque purus, vitae semper enim. Morbi quis tortor vitae magna imperdiet consequat id imperdiet enim. Integer dui ipsum, aliquam et nibh at, tempor blandit orci. Suspendisse sodales vulputate facilisis. Integer et feugiat lectus. Fusce a lectus vestibulum, hendrerit nibh nec, euismod odio.
+            Pellentesque euismod sapien id ligula rhoncus convallis. Pellentesque molestie metus ac eros auctor, eget pulvinar tellus hendrerit. Mauris id faucibus ante. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut vestibulum risus quis facilisis interdum. Ut nec tortor eu enim laoreet condimentum fermentum posuere dolor. Nullam lorem neque, vulputate id tristique quis, malesuada vel tortor. Mauris viverra tortor ut sodales dictum. Sed in enim ullamcorper, porta purus id, convallis est. In sagittis est quis feugiat consequat. Duis adipiscing felis eu gravida dictum. Nunc ullamcorper dictum rutrum. Integer semper neque eget elit interdum malesuada. Vestibulum adipiscing mattis eleifend.
+            Pellentesque ut felis nisi. Sed mollis facilisis arcu sit amet porta. Vivamus in viverra libero, id dictum sem. Aliquam augue tortor, ultricies in leo sit amet, malesuada mattis magna. Curabitur convallis lacus eget urna cursus, egestas consectetur sapien porta. Mauris volutpat lectus a nunc vehicula, non cursus elit venenatis. Proin quis turpis gravida, pretium nisl quis, imperdiet tellus. Nullam molestie imperdiet tristique. Maecenas lacinia sem et pellentesque pulvinar. Curabitur condimentum porta nulla, non tincidunt leo ullamcorper vitae. Nam tincidunt massa vitae convallis rutrum.
+            Vivamus sollicitudin elit eget orci hendrerit rhoncus. In euismod euismod quam ut placerat. Maecenas ultrices mollis elit sit amet porta. Quisque ante augue, vestibulum sed augue et, faucibus malesuada justo. Etiam sed sapien tincidunt nisi sagittis gravida et et nunc. Maecenas consequat metus lorem, non consectetur dui feugiat a. Sed sit amet tempus lacus, sit amet eleifend neque. Donec tincidunt sed mauris sed cursus. Vivamus tristique neque a massa egestas convallis. Cras ante odio, semper id orci sit amet, semper auctor ligula.
+            In varius lacus id vestibulum tincidunt. Cras porta malesuada euismod. Sed ut lectus at eros tincidunt pulvinar quis vitae neque. Integer sit amet nibh ipsum. Sed porttitor risus ac purus dapibus varius. Etiam tincidunt, mauris eget rutrum lobortis, tellus arcu blandit justo, eget iaculis orci odio eget quam. Etiam pellentesque consectetur sapien, ac cursus erat ornare vel. Interdum et malesuada fames ac ante ipsum primis in faucibus. 
+        </div>
+        <div class="col span_8_of_10" id="map"></div>
+        <div class="col span_1_of_10" id="rightsidebar">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in eros sapien. Nullam ut ullamcorper turpis. Donec congue quam vitae mi blandit rhoncus. Etiam non nisl dolor. Praesent sit amet ullamcorper urna. Nulla non mauris eget urna venenatis molestie. Proin nulla est, lobortis quis malesuada eget, porttitor a turpis. Curabitur consequat ligula vitae neque gravida, eu tincidunt elit consectetur. Nullam ornare euismod nisi, id fringilla felis volutpat sit amet. Praesent quis justo a massa mollis interdum sed a augue. Vestibulum elit mi, convallis quis ultrices et, congue quis augue. Sed viverra tortor nibh, id pretium erat tincidunt pellentesque. Integer a purus leo. Praesent bibendum interdum purus. Mauris vitae ligula nunc.
+            Curabitur sed felis quis felis volutpat posuere eu eu sem. Aenean faucibus nulla lacus, quis rutrum justo malesuada vel. Cras pretium iaculis erat in scelerisque. Cras sagittis hendrerit feugiat. In in iaculis lectus. Integer a erat ultrices sapien auctor pulvinar. Phasellus justo eros, facilisis vitae pulvinar vel, egestas ut est.
+            Suspendisse malesuada volutpat mattis. Aliquam condimentum leo in ante egestas bibendum. Quisque mi turpis, condimentum facilisis pharetra quis, rutrum quis elit. Proin mollis lectus nisi, in pharetra magna faucibus ac. Morbi aliquet nisi at lacus euismod molestie. Sed consequat, velit sit amet pulvinar fermentum, nisl orci hendrerit mauris, eu consequat sem nunc eu magna. Fusce purus diam, elementum imperdiet nunc a, imperdiet adipiscing massa. Vivamus at massa arcu. Vestibulum aliquet vestibulum sapien, et tincidunt arcu euismod pellentesque. Aliquam arcu ligula, condimentum a porta quis, vulputate sed elit. Quisque id aliquet odio.
+            Etiam rutrum odio nec mollis malesuada. Proin lobortis tempus consequat. Fusce varius magna sit amet mi bibendum, a convallis est malesuada. Sed ut elementum quam. Nam vitae congue neque. Phasellus sit amet diam erat. Maecenas porttitor augue nulla, non semper neque posuere a.
+            Ut varius cursus tincidunt. Nam vitae turpis et nulla tempor pretium. Sed blandit, quam non elementum porta, libero leo blandit metus, sed pulvinar est augue id eros. Sed at luctus urna. Aliquam in neque purus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec ac libero vel dui varius tincidunt nec quis neque. Suspendisse aliquam, massa vel viverra tristique, purus velit dignissim urna, a egestas leo erat sed ligula. Nullam semper scelerisque sollicitudin. Fusce aliquam augue quis adipiscing faucibus. Fusce sed urna vel nulla posuere auctor. 
+        </div>
+    </span>
+    <div id="footer">
+        &copy; <?= $year ?> <?= $sitename ?>
+    </div>
+</div>
+
+
+<div class="dialog" id="dialog_waiting">
+    <br/>
+    One moment please
+</div>
+
+
+<div class="dialog" id="dialog_legend">
+    <!--
+    THE CORE LAYERS
+    AT THIS TIME IDENTICAL TO THE CONTEXT LAYERS, BUT THAT MAY CHANGE SO THE HARD DISTINCTION IS ESTABLISHED HERE
+    -->
+    <?php if ($core_layers['notes']['enabled']) { ?>
+        <div class="legend_block" data-layer="notes">
+            <label>
+                <?= form_checkbox('layers[]', "notes", $core_layers['notes']['onbydefault']) ?>
+                <span class="legend_title" title="<?= htmlspecialchars($core_layers['notes']['tooltip']) ?>"><?= htmlspecialchars($core_layers['notes']['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $core_layers['notes']['opacity'] ?>"></div>
+                <label><input type="checkbox" name="status[]" value="Accepted" checked /><img src="<?= site_url('wms/legends/core-notes-accepted.png') ?>" /> Accepted</label><br/>
+                <label><input type="checkbox" name="status[]" value="Declined" checked /><img src="<?= site_url('wms/legends/core-notes-declined.png') ?>" /> Declined</label><br/>
+                <label><input type="checkbox" name="status[]" value="Pending" checked /><img src="<?= site_url('wms/legends/core-notes-pending.png') ?>" /> Pending</label><br/>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if ($core_layers['points']['enabled']) { ?>
+        <div class="legend_block" data-layer="points">
+            <label>
+                <?= form_checkbox('layers[]', "points", $core_layers['points']['onbydefault']) ?>
+                <span class="legend_title" title="<?= htmlspecialchars($core_layers['points']['tooltip']) ?>"><?= htmlspecialchars($core_layers['points']['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $core_layers['points']['opacity'] ?>"></div>
+                <label><input type="checkbox" name="status[]" value="Accepted" checked /><img src="<?= site_url('wms/legends/core-points-accepted.png') ?>" /> Accepted</label><br/>
+                <label><input type="checkbox" name="status[]" value="Declined" checked /><img src="<?= site_url('wms/legends/core-points-declined.png') ?>" /> Declined</label><br/>
+                <label><input type="checkbox" name="status[]" value="Pending" checked /><img src="<?= site_url('wms/legends/core-points-pending.png') ?>" /> Pending</label><br/>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if ($core_layers['lines']['enabled']) { ?>
+        <div class="legend_block" data-layer="lines">
+            <label>
+                <?= form_checkbox('layers[]', "lines", $core_layers['lines']['onbydefault']) ?>
+                <span class="legend_title" title="<?= htmlspecialchars($core_layers['points']['tooltip']) ?>"><?= htmlspecialchars($core_layers['lines']['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $core_layers['lines']['opacity'] ?>"></div>
+                <label><input type="checkbox" name="status[]" value="Accepted" checked /><img src="<?= site_url('wms/legends/core-lines-accepted.png') ?>" /> Accepted</label><br/>
+                <label><input type="checkbox" name="status[]" value="Declined" checked /><img src="<?= site_url('wms/legends/core-lines-declined.png') ?>" /> Declined</label><br/>
+                <label><input type="checkbox" name="status[]" value="Pending" checked /><img src="<?= site_url('wms/legends/core-lines-pending.png') ?>" /> Pending</label><br/>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if ($core_layers['polygons']['enabled']) { ?>
+        <div class="legend_block" data-layer="polygons">
+            <label>
+                <?= form_checkbox('layers[]', "polygons", $core_layers['polygons']['onbydefault']) ?>
+                <span class="legend_title" title="<?= htmlspecialchars($core_layers['points']['tooltip']) ?>"><?= htmlspecialchars($core_layers['polygons']['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $core_layers['polygons']['opacity'] ?>"></div>
+                <label><input type="checkbox" name="status[]" value="Accepted" checked /><img src="<?= site_url('wms/legends/core-polygons-accepted.png') ?>" /> Accepted</label><br/>
+                <label><input type="checkbox" name="status[]" value="Declined" checked /><img src="<?= site_url('wms/legends/core-polygons-declined.png') ?>" /> Declined</label><br/>
+                <label><input type="checkbox" name="status[]" value="Pending" checked /><img src="<?= site_url('wms/legends/core-polygons-pending.png') ?>" /> Pending</label><br/>
+            </div>
+        </div>
+    <?php } ?>
+
+    <!--
+    THE CONTEXT LAYERS
+    AT THIS TIME IDENTICAL TO THE CORE LAYERS, BUT THAT MAY CHANGE SO THE HARD DISTINCTION IS ESTABLISHED HERE
+    -->
+    <?php foreach ($context_layers as $layer) { ?>
+        <div class="legend_block" data-layer="<?= $layer['wmslayer'] ?>">
+            <label>
+                <?= form_checkbox('layers[]', $layer['wmslayer'], $layer['onbydefault']) ?>
+                <?php if ($layer['tinylegend']) { ?>
+                    <img src="<?= site_url("wms/legends/{$layer['wmslayer']}.png") ?>" />
+                <?php } ?>
+                <span class="legend_title" title="<?= htmlspecialchars($layer['tooltip']) ?>"> <?= htmlspecialchars($layer['title']) ?></span>
+                <img class="legend_spinner" src="<?= site_url('application/views/site/images/spinner_small.gif') ?>" />
+            </label>
+            <br/>
+            <div class="legend_content">
+                <div class="legend_slider" data-opacity="<?= $layer['opacity'] ?>"></div>
+                <?php if (! $layer['tinylegend']) { ?>
+                    <img src="<?= site_url("wms/legends/{$layer['wmslayer']}.png") ?>" />
+                <?php } ?>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+
+
+<div class="dialog" id="dialog_accordion">
+    <!--
+    this is not a true accordion, since we can have multiple sections open at once
+    see also initAccordion() where we set up these behaviors, e.g. the data-tabname to select a specific tab
+    see also accordionOpen() et al which open and close accordion panels, and which will do tab-specific callbacks such as turning tools on and off depending on the selected tab
+    -->
+
+    <h1 data-tabname="welcome" data-exclusive="true">Introduction</h1>
+    <div>
+        <p>Welcome to MapCollaborator&trade; <?= $sitename ?></p>
+        <p>Insert more welcome text here</p>
+    </div>
+
+    <h1 data-tabname="geocode">Zoom to a location</h1>
+    <div>
+        <p>Choose a location by using the zoom tools on the map, search for a location below, or pick a location from the list.</p>
+        <p>
+            <input type="text" id="geocode_text" placeholder="address, city, or landmark" style="width:80%;" />
+            <input type="button" id="geocode_go" value="Zoom &gt;" style="width:15%;" />
+        </p>
+        <p>
+            <div style="text-align:center;">
+            <?php foreach ($zoomto_options as $gname=>$goptions) { ?>
+                <span class="geocode_zoomto_link" data-zoomtype="<?= htmlspecialchars($gname) ?>"><?= htmlspecialchars($gname) ?></span>
+            <?php } ?>
+            </div>
+            <?php foreach ($zoomto_options as $gname=>$goptions) { ?>
+                <?= form_dropdown('zoomto', $goptions, '', "class=\"geocode_zoomto\" data-zoomtype=\"". htmlspecialchars($gname) ."\"") ?>
+            <?php } ?>
+        </p>
+    </div>
+
+    <?php if ($core_layers['notes']['enabled']) { ?>
+    <h1 data-tabname="note" data-exclusive="true"><?= htmlspecialchars($core_layers['notes']['edittitle']) ?></h1>
+    <div>
+        <div>
+            <p>Click the Place button below, then place the marker to indicate where you would like to post a note, and fill in the fields below. Please be as precise as possible.</p>
+        </div>
+
+        <input type="button" class="drawtool_button" data-tool="note" value="Place a note" />
+        <form action="<?= site_url('site/save_edit') ?>" method="POST" class="drawtool_form" data-tool="note">
+            <!-- iterate over fields and use the form generator -->
+            <?php
+            foreach ($core_layers['notes']['form_fields'] as $fieldspec) {
+                switch ($fieldspec['type']) {
+                    case 'text':
+                        $this->load->view('site/editform/notes/text.phtml', $fieldspec);
+                        break;
+                    case 'textarea':
+                        $this->load->view('site/editform/notes/textarea.phtml', $fieldspec);
+                        break;
+                    case 'select':
+                        $this->load->view('site/editform/notes/select.phtml', $fieldspec);
+                        break;
+                    case 'checkbox':
+                        $this->load->view('site/editform/notes/checkbox.phtml', $fieldspec);
+                        break;
+                    case 'radio':
+                        $this->load->view('site/editform/notes/radio.phtml', $fieldspec);
+                        break;
+                    case 'custom':
+                        if (is_file("application/views/site/editform/notes/custom_{$fieldspec['fieldname']}.phtml")) {
+                            $this->load->view("site/editform/notes/custom_{$fieldspec['fieldname']}.phtml", $fieldspec);
+                        } else {
+                            print "{$fieldspec['fieldname']} missing template custom_{$fieldspec['fieldname']}.phtml <br/>\n";
+                        }
+                        break;
+                    default:
+                        print "{$fieldspec['fieldname']} has unknown field type {$fieldspec['type']} <br/>\n";
+                        break;
+                }
+            }
+            ?>
+
+            <br/>
+            Your contact info:<br/>
+            <input type="text" name="submitted_name"  placeholder="your name " data-required="Please enter your contact information" /><br/>
+            <input type="text" name="submitted_org"   placeholder="your organization or affiliation" data-required="Please enter your contact information" /><br/>
+            <input type="text" name="submitted_email" placeholder="your email address" data-required="Please enter your contact information" /><br/>
+            <br/>
+            <input type="submit" value="Save note" class="drawtool_submit" />
+            <input type="button" value="Cancel" class="drawtool_cancel" />
+        </form>
+    </div>
+    <?php } ?>
+
+    <?php if ($core_layers['points']['enabled']) { ?>
+    <h1 data-tabname="points" data-exclusive="true"><?= htmlspecialchars($core_layers['points']['edittitle']) ?></h1>
+    <div>
+        <div>
+            <p>Click the Place button below, then drag the marker to the appropriate location (please zoom in and be precise) and fill in the details below.</p>
+            <p><b>Or</b>, use the Upload button to upload a shapefile or KML of your points.</p>
+        </div>
+
+        <input type="button" class="drawtool_button" data-tool="point" value="Place a point" />
+        <input type="button" class="drawshp_button" data-tool="point" value="Upload points" />
+        <form action="<?= site_url('site/save_edit') ?>" method="POST" class="drawtool_form" data-tool="point">
+            <!-- iterate over fields and use the form generator -->
+            <?php
+            foreach ($core_layers['points']['form_fields'] as $fieldspec) {
+                switch ($fieldspec['type']) {
+                    case 'text':
+                        $this->load->view('site/editform/points/text.phtml', $fieldspec);
+                        break;
+                    case 'textarea':
+                        $this->load->view('site/editform/points/textarea.phtml', $fieldspec);
+                        break;
+                    case 'select':
+                        $this->load->view('site/editform/points/select.phtml', $fieldspec);
+                        break;
+                    case 'checkbox':
+                        $this->load->view('site/editform/points/checkbox.phtml', $fieldspec);
+                        break;
+                    case 'radio':
+                        $this->load->view('site/editform/points/radio.phtml', $fieldspec);
+                        break;
+                    case 'custom':
+                        if (is_file("application/views/site/editform/points/custom_{$fieldspec['fieldname']}.phtml")) {
+                            $this->load->view("site/editform/points/custom_{$fieldspec['fieldname']}.phtml", $fieldspec);
+                        } else {
+                            print "{$fieldspec['fieldname']} missing template custom_{$fieldspec['fieldname']}.phtml <br/>\n";
+                        }
+                        break;
+                    default:
+                        print "{$fieldspec['fieldname']} has unknown field type {$fieldspec['type']} <br/>\n";
+                        break;
+                }
+            }
+            ?>
+
+            <br/>
+            Your contact info:<br/>
+            <input type="text" name="submitted_name"  placeholder="your name " data-required="Please enter your contact information" /><br/>
+            <input type="text" name="submitted_org"   placeholder="your organization or affiliation" data-required="Please enter your contact information" /><br/>
+            <input type="text" name="submitted_email" placeholder="your email address" data-required="Please enter your contact information" /><br/>
+            <br/>
+            <div><!-- tip: showTool() presumes that the upload input is inside a parent container, e.g. a div or label -->
+                Select file to upload:<br/>
+                <input type="file" name="upload" /><br/><br/>
+            </div>
+            <input type="submit" value="Save point" class="drawtool_submit" />
+            <input type="submit" value="Upload" class="drawshp_submit" />
+            <input type="button" value="Cancel" class="drawtool_cancel" />
+        </form>
+    </div>
+    <?php } ?>
+
+    <?php if ($core_layers['lines']['enabled']) { ?>
+    <h1 data-tabname="lines" data-exclusive="true"><?= htmlspecialchars($core_layers['lines']['edittitle']) ?></h1>
+    <div>
+        <div>
+            <p>Click the Draw button below to activate the drawing tool, then draw on the map to indicate the path or route (please zoom in and be precise) and fill in the details below.</p>
+            <p><b>Or</b>, use the Upload button to upload a shapefile or KML of your lines.</p>
+        </div>
+
+        <input type="button" class="drawtool_button" data-tool="line" value="Draw a line" />
+        <input type="button" class="drawshp_button" data-tool="line" value="Upload lines" />
+        <form action="<?= site_url('site/save_edit') ?>" method="POST" class="drawtool_form" data-tool="line">
+            <!-- iterate over fields and use the form generator -->
+            <?php
+            foreach ($core_layers['lines']['form_fields'] as $fieldspec) {
+                switch ($fieldspec['type']) {
+                    case 'text':
+                        $this->load->view('site/editform/lines/text.phtml', $fieldspec);
+                        break;
+                    case 'textarea':
+                        $this->load->view('site/editform/lines/textarea.phtml', $fieldspec);
+                        break;
+                    case 'select':
+                        $this->load->view('site/editform/lines/select.phtml', $fieldspec);
+                        break;
+                    case 'checkbox':
+                        $this->load->view('site/editform/lines/checkbox.phtml', $fieldspec);
+                        break;
+                    case 'radio':
+                        $this->load->view('site/editform/lines/radio.phtml', $fieldspec);
+                        break;
+                    case 'custom':
+                        if (is_file("application/views/site/editform/lines/custom_{$fieldspec['fieldname']}.phtml")) {
+                            $this->load->view("site/editform/lines/custom_{$fieldspec['fieldname']}.phtml", $fieldspec);
+                        } else {
+                            print "{$fieldspec['fieldname']} missing template custom_{$fieldspec['fieldname']}.phtml <br/>\n";
+                        }
+                        break;
+                    default:
+                        print "{$fieldspec['fieldname']} has unknown field type {$fieldspec['type']} <br/>\n";
+                        break;
+                }
+            }
+            ?>
+
+            <br/>
+            Your contact info:<br/>
+            <input type="text" name="submitted_name"  placeholder="your name " data-required="Please enter your contact information" /><br/>
+            <input type="text" name="submitted_org"   placeholder="your organization or affiliation" data-required="Please enter your contact information" /><br/>
+            <input type="text" name="submitted_email" placeholder="your email address" data-required="Please enter your contact information" /><br/>
+            <br/>
+            <div><!-- tip: showTool() presumes that the upload input is inside a parent container, e.g. a div or label -->
+                Select file to upload:<br/>
+                <input type="file" name="upload" /><br/><br/>
+            </div>
+            <input type="submit" value="Save line" class="drawtool_submit" />
+            <input type="submit" value="Upload" class="drawshp_submit" />
+            <input type="button" value="Cancel" class="drawtool_cancel" />
+        </form>
+    </div>
+    <?php } ?>
+
+    <?php if ($core_layers['polygons']['enabled']) { ?>
+    <h1 data-tabname="polygons" data-exclusive="true"><?= htmlspecialchars($core_layers['polygons']['edittitle']) ?></h1>
+    <div>
+        <div>
+            <p>Click the Draw button below to activate the drawing tool, then draw out the area (please zoom in and be precise) and fill in the details below.</p>
+            <p><b>Or</b>, use the Upload button to upload a shapefile or KML of your areas.</p>
+        </div>
+
+        <input type="button" class="drawtool_button" data-tool="polygon" value="Draw an area" />
+        <input type="button" class="drawshp_button" data-tool="polygon" value="Upload polygons" />
+        <form action="<?= site_url('site/save_edit') ?>" method="POST" class="drawtool_form" data-tool="polygon">
+            <!-- iterate over fields and use the form generator -->
+            <?php
+            foreach ($core_layers['polygons']['form_fields'] as $fieldspec) {
+                switch ($fieldspec['type']) {
+                    case 'text':
+                        $this->load->view('site/editform/polygons/text.phtml', $fieldspec);
+                        break;
+                    case 'textarea':
+                        $this->load->view('site/editform/polygons/textarea.phtml', $fieldspec);
+                        break;
+                    case 'select':
+                        $this->load->view('site/editform/polygons/select.phtml', $fieldspec);
+                        break;
+                    case 'checkbox':
+                        $this->load->view('site/editform/polygons/checkbox.phtml', $fieldspec);
+                        break;
+                    case 'radio':
+                        $this->load->view('site/editform/polygons/radio.phtml', $fieldspec);
+                        break;
+                    case 'custom':
+                        if (is_file("application/views/site/editform/polygons/custom_{$fieldspec['fieldname']}.phtml")) {
+                            $this->load->view("site/editform/polygons/custom_{$fieldspec['fieldname']}.phtml", $fieldspec);
+                        } else {
+                            print "{$fieldspec['fieldname']} missing template custom_{$fieldspec['fieldname']}.phtml <br/>\n";
+                        }
+                        break;
+                    default:
+                        print "{$fieldspec['fieldname']} has unknown field type {$fieldspec['type']} <br/>\n";
+                        break;
+                }
+            }
+            ?>
+
+            <br/>
+            Your contact info:<br/>
+            <input type="text" name="submitted_name"  placeholder="your name " data-required="Please enter your contact information" /><br/>
+            <input type="text" name="submitted_org"   placeholder="your organization or affiliation" data-required="Please enter your contact information" /><br/>
+            <input type="text" name="submitted_email" placeholder="your email address" data-required="Please enter your contact information" /><br/>
+            <br/>
+            <div><!-- tip: showTool() presumes that the upload input is inside a parent container, e.g. a div or label -->
+                Select file to upload:<br/>
+                <input type="file" name="upload" /><br/><br/>
+            </div>
+            <input type="submit" value="Save area" class="drawtool_submit" />
+            <input type="submit" value="Upload" class="drawshp_submit" />
+            <input type="button" value="Cancel" class="drawtool_cancel" />
+        </form>
+    </div>
+    <?php } ?>
+
+    <h1 data-tabname="edit">Edit a location</h1>
+    <div>
+        <p><b>To submit an edit to a location</b> zoom the map and find the location you want to modify. Click it, and you'll get a popup bubble. In that popup bubble, click the edit link. You can then make edits to the shape (optional) and add a note as to the nature of your change.</p>
+        <p><b>To draw a new location</b>, select the appropriate option from the menu.</p>
+    </div>
+</div>
+
+
+<div class="dialog" id="dialog_share">
+    <textarea style="width:4in; height:1in;"></textarea>
+</div>
+
+
+</body>
+</html>
