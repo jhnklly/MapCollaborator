@@ -350,7 +350,7 @@ private function _handleFileUploadAndReturnWKT_ZIPSHP($filename) {
     if (! file_exists($prj) ) throw new Exception("Reprojection failed. Try again with WGS84?");
 
     // ready to run ogrinfo to get the polygons
-    $command = sprintf("ogrinfo -ro -q -al -fields=NO %s", $shp );
+    $command = sprintf("%s -ro -q -al -fields=NO %s", $this->config->item('ogrinfo'), $shp );
     $geoms = `$command`;
     $geoms = explode("\n",$geoms);
 
@@ -367,7 +367,7 @@ private function _handleFileUploadAndReturnWKT_ZIPSHP($filename) {
 private function _handleFileUploadAndReturnWKT_KML($filename) {
     // one great thing about KML: we can presume that it's in WGS84 SRS (EPSG:4326) so we don't need to reproject
 
-    $command = sprintf("ogrinfo -ro -q -al -fields=NO %s", $filename );
+    $command = sprintf("%s -ro -q -al -fields=NO %s", $this->config->item('ogrinfo'), $filename );
     $geoms = `$command`;
     $geoms = explode("\n",$geoms);
 

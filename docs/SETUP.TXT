@@ -16,29 +16,28 @@ MapCollaborator NG2014 is based on GIN Bootstrap.
 
 All of these components are well documented at their own websites. Ask Google.
 
-Start by reading the SETUP.TXT file, which outlines steps to get started,
+Start by reading this SETUP.TXT file, which outlines steps to get started,
 and refer to the common tasks walkthrough in HOWTO.TXT
 
 
+0.
+Verify your prerequisites. The setup is specifally oriented towards our own GIS
+server and PostGIS installation, so you may need to contrive a little to match our setup.
+
+    PostgreSQL
+    PostGIS 2.x
+    A database, username, and password
+        the username and database name are presumed to be the same
+        if they are not, see config/database.php for additional configuration
+    Command-line GDAL/OGR tools, most notably ogrinfo and pgsql2shp
+
 1.
 Start by taking a copy of the files:
-    cp -rp /maps/mapcollaborator/template /maps/mapcollaborator/mapcollab_mynewapp
+    git clone https://github.com/greeninfo/MapCollaborator.git
 
 2.
-Then take a copy of the database:
-
-    sudo su - postgres -c psql
-        CREATE USER mapcollab_mynewapp password 'abcdefgh12345678'; 
-        ALTER USER mapcollab_mynewapp SET search_path TO public,data;
-        CREATE DATABASE mapcollab_mynewapp TEMPLATE mapcollab_template OWNER mapcollab_mynewapp;
-        \c mapcollab_mynewapp
-        GRANT ALL on schema data to mapcollab_mynewapp;
-        ALTER TABLE spatial_ref_sys  OWNER TO mapcollab_mynewapp;
-        ALTER VIEW geography_columns OWNER TO mapcollab_mynewapp;
-        ALTER VIEW geometry_columns  OWNER TO mapcollab_mynewapp;
-        ALTER VIEW raster_columns    OWNER TO mapcollab_mynewapp;
-        ALTER VIEW raster_overviews  OWNER TO mapcollab_mynewapp;
-        \q
+Then load up the database:
+    psql -u db_username -f docs/setup.sql
 
 3.
 Now get editing on these core items:

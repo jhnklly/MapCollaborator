@@ -225,11 +225,13 @@ $config['allow_registration'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
-| SHP2PGSQL
-| for exporting a PostGIS table to shapefile
+| GIS COMMAND LINE TOOLS
+| pgsql2shp for exporting a PostGIS table to shapefile
+| ogrinfo for analyzing shapefiles and KMLs
 |--------------------------------------------------------------------------
 */
 $config['pgsql2shp'] = "/usr/lib/postgresql/9.2/bin/pgsql2shp";
+$config['ogrinfo']   = "/usr/bin/ogrinfo";
 
 
 /*
