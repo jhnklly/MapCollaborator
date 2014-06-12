@@ -31,9 +31,30 @@ server and PostGIS installation, so you may need to contrive a little to match o
         if they are not, see config/database.php for additional configuration
     Command-line GDAL/OGR tools, most notably ogrinfo and pgsql2shp
 
+Tip: On our server, we have a template1 database which is suitable as a clean start
+     with no data except for PostGIS.
+
+    sudo su - postgres -c psql
+        CREATE USER mapcollab_mynewapp password 'abcdefgh12345678';
+        ALTER USER mapcollab_mynewapp SET search_path TO public,data;
+        CREATE DATABASE mapcollab_mynewapp TEMPLATE template1 OWNER mapcollab_mynewapp;
+        \c mapcollab_mynewapp
+        GRANT ALL on schema data to mapcollab_mynewapp;
+        ALTER TABLE spatial_ref_sys  OWNER TO mapcollab_mynewapp;
+        ALTER VIEW geography_columns OWNER TO mapcollab_mynewapp;
+        ALTER VIEW geometry_columns  OWNER TO mapcollab_mynewapp;
+        ALTER VIEW raster_columns    OWNER TO mapcollab_mynewapp;
+        ALTER VIEW raster_overviews  OWNER TO mapcollab_mynewapp;
+        \q
+
 1.
-Start by taking a copy of the files:
+Start by taking a copy of the files, and renaming it for your client and project:
     git clone https://github.com/greeninfo/MapCollaborator.git
+    mv MapCollaborator someone-project
+    cd someone-project
+
+    Thus, on our webserver the resulting application is:
+        http://www.mapcollaborator.org/someone-project/
 
 2.
 Then load up the database:
