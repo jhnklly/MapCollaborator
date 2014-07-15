@@ -16,6 +16,7 @@
     opacity: 0.6;
 }
 
+/*
 .ui-widget-header {
     background:none no-repeat scroll 50% 50% #2191C0;
 }
@@ -30,7 +31,7 @@
     color: #000000;
     text-decoration: none;
 }
-
+*/
 
 /* STACKING ORDER OF CONTROLS RELATIVE TO JQUI MODAL DIALOGS... */
 
@@ -144,4 +145,22 @@
 .leaflet-control-fullscreen-button {
     background-image:url(http://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.2/fullscreen.png);
 }
+
+
+/* begin jmk */
+/* Unify fonts globally (override jquery ui) */
+* {font-family: 'Gotham Narrow Book', sans-serif;}
+
+/* more jquery overrides */
+.ui-dialog {
+    background: none repeat scroll 0 0 #ffffff;
+    /*border: 1px solid #4FA5D6;*/
+    border-radius: 0px;
+    padding: 0px;
+    position: absolute;
+}
+
+
+/* end jmk */
+
 

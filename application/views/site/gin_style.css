@@ -1,0 +1,791 @@
+/* ==========================================================================
+    #Reset
+========================================================================== */
+* { padding: 0; margin: 0; outline: 0; }
+
+/* ==========================================================================
+    #Base
+========================================================================== */
+html,
+body { height: 100%; }
+
+html { overflow-y: scroll; }
+body { background: #fff; font-family: 'Gotham Narrow Book', sans-serif; font-size: 18px; line-height: 1.67; color: #606758; }
+
+
+a { text-decoration: none; color: #a0b94b; cursor: pointer; }
+a:hover { color: #a0b94b; text-decoration: underline; }
+
+img { border: 0; vertical-align: middle; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong { font-family: 'Gotham Narrow Bold', sans-serif; font-weight: normal; }
+
+h2 { font-size: 46px; }
+h3 { padding-bottom: 1px; font-size: 24px; line-height: 1.5; }
+h4 { font-size: 19px; }
+h5 { font-size: 18px; }
+
+p { padding-bottom: 15px; }
+
+input,
+select,
+textarea { font-family: 'Gotham Narrow Book', sans-serif; font-size: 13px; color: #606758; }
+textarea { overflow: auto; }
+select, input[type="checkbox"] { cursor: pointer; }
+
+input[type="submit"] {
+    font-size: 18px;
+    padding: 2px 5px;
+}
+
+input[type="text"], input[type="password"], textarea {
+    min-width: 220px;
+    padding: 5px;
+}
+
+ul,
+ol { list-style-position: inside; }
+
+ul.indent,
+ol.indent { padding-left: 1.1em; }
+
+img {
+    max-width: 100%;
+}
+
+.content {
+    padding-left: 11px;
+}
+
+/* ==========================================================================
+    #Containers
+========================================================================== */
+.wrapper { position: relative; min-height: 100%; }
+.shell { width: 980px; margin: 0 auto; }
+
+/* ==========================================================================
+    #Buttons
+========================================================================== */
+.btn { display: inline-block; border: 0; vertical-align: middle; background: url(images/sprite.png) 0 0 no-repeat; cursor: pointer; }
+
+/* ==========================================================================
+    #Icons
+========================================================================== */
+[class^="icon-"] { display: inline-block; vertical-align: middle; background: url(images/sprite.png) 0 0 no-repeat; }
+
+.icon-email,
+.icon-jobs,
+.icon-search,
+.icon-facebook,
+.icon-twitter,
+.icon-linkedin,
+.icon-rss,
+.icon-googleplus,
+.icon-share { font-size: 0; line-height: 0; }
+
+.icon-search { width: 24px; height: 25px; background-position: 0 -134px; }
+.icon-search:hover { background-position: -25px -134px; }
+
+.icon-facebook,
+.icon-twitter,
+.icon-linkedin,
+.icon-rss,
+.icon-googleplus,
+.icon-share { width: 25px; height: 25px; margin: 0 7px; }
+
+.icon-facebook { background-position: 0 -187px; }
+.icon-facebook:hover { background-position: -130px -161px; }
+
+.icon-twitter { background-position: -52px -187px; }
+.icon-twitter:hover { background-position: -26px -187px; }
+
+.icon-linkedin { background-position: -52px -161px; }
+.icon-linkedin:hover { background-position: -26px -161px; }
+
+.icon-rss { background-position: 0 -161px; }
+.icon-rss:hover { background-position: -125px -134px; }
+
+.icon-googleplus { background-position: -104px -161px; }
+.icon-googleplus:hover { background-position: -78px -161px; }
+
+.icon-share { background-image: url("http://websites.greeninfo.org/greeninfo/ginwebsite/css/images/Share1.png"); background-size: 100% auto; }
+.icon-share:hover { /*background-position: -78px -161px;*/ }
+
+.icon-email { width: 34px; height: 26px; margin-left: 7px; background-position: -113px -105px; }
+.icon-email:hover { background-position: -88px -134px; }
+
+.icon-jobs { width: 37px; height: 26px; background-position: -113px -78px; }
+.icon-jobs:hover { background-position: -50px -134px; }
+
+.icon-subscribe { position: relative; left: -9px; top: 1px; width: 31px; height: 25px; background: url(images/sprite24.png) -17px 0 no-repeat; }
+.icon-subscribe:hover { background: url(images/sprite24.png) -49px 0 no-repeat; }
+
+.icon-arrow { width: 11px; height: 17px; background: url(images/sprite24.png) 0 0 no-repeat; }
+
+.icon-toggle { width: 11px; height: 11px; background-position: -78px -187px; }
+
+.icon-plus { width: 12px; height: 12px; display: none; margin: 0 0 3px 3px; background: url(images/plus_minus.png) top center no-repeat; }
+.icon-plus.active { background: url(images/plus_minus.png) bottom center no-repeat; }
+
+/* ==========================================================================
+    #Header
+========================================================================== */
+.header { border-bottom: 35px solid #e1e2d2; }
+.header .container { height: 100px; }
+
+.logo { float: left; width: 157px; margin: 0; margin-top: 15px; }
+.logo a { overflow: hidden; display: block; height: 77px; background: url(images/sprite.png) 0 0 no-repeat; text-indent: 100%; white-space: nowrap; }
+
+.search,
+.form-subscribe,
+.header .socials,
+.nav,
+.header-bar { float: right; }
+
+.nav { margin-top: 24px; clear:  right;}
+.nav ul { overflow: hidden; list-style: none outside none; }
+.nav li { float: left; padding-left: 32px; }
+.nav a { font-family: 'Gotham Narrow Bold', sans-serif; font-size: 18px; color: #606758; text-transform: uppercase; }
+.nav a:hover,
+.nav .current a { color: #a0b94b; text-decoration: none; }
+
+.nav.open > ul { display: block; }
+
+.nav-toggle { display: none; width: 29px; height: 29px; background: url(images/sprite-mobile.png) -66px -68px no-repeat; }
+.nav-toggle:hover { background: url(images/sprite-mobile.png) -66px -158px no-repeat; }
+
+.form-subscribe .field { width: 160px; height: 25px; padding: 0 5px 0; border: 0; background: #e1e3d3; text-align: center; }
+
+.search { padding: 12px 0 0 27px; }
+.search > div:first-child { position: absolute; z-index: 1;}
+
+.form-subscribe { margin: 7px 0 0 17px; }
+
+.header .socials { margin-top: 9px; }
+
+/* ==========================================================================
+    #Main
+========================================================================== */
+.main { padding: 28px 0 104px; }
+.main-head {
+    margin-left: 0;
+    margin-right: 0;
+    position: relative;
+    margin-bottom: 1px;
+}
+
+.pagination, .log-in, .share-work { font-family: 'Gotham Narrow Bold', sans-serif; color: #a0b94b; }
+.main-head .log-in { position: absolute; top: 11px; right: 0; font-family: 'Gotham Narrow Bold', sans-serif; }
+.main-head .pagination {
+    margin-top: 5.5px;
+    text-align: right;
+    margin-bottom: 0;
+}
+.main-head .head-right {
+    margin-top: 8.5px; text-align: right;
+}
+
+.work-search {
+    line-height: 2em;
+    padding-top: 3px;
+}
+.work-search .clear-search {
+    margin-left: 7px;
+    vertical-align: middle;
+}
+.params {
+    padding-left: 5px;
+}
+.params span {
+    margin-left: 2px;
+    line-height: 1.2em;
+}
+.params span a {
+    
+}
+
+.pagination a, .pagination strong { display: inline-block; *display: inline; *zoom: 1; margin-left: 4px; }
+.main-head .pagination a:hover { color: #606758; text-decoration: none; }
+.main-head .pagination .next { width: 9px; height: 14px; background: url(images/sprite24.png) 0 -28px no-repeat; }
+.main-head .pagination .next:hover { background-position: -12px -28px; }
+/* .pagination > strong { color: #606758; } */
+.pagination > strong {
+    color: #ED9E21;
+}
+
+.sidebar { margin-top: 16px; }
+
+h2 a, h2 a:hover {
+    color: #606758;
+}
+
+/* ==========================================================================
+    #Widgets
+========================================================================== */
+.widgets { list-style: none outside none; }
+
+.widgettitle { position: relative; padding: 6px 11px 2px; margin: 0; }
+
+.widget { padding-bottom: 21px; }
+
+.widget-services .icon-arrow,
+.widget-solutions .icon-arrow,
+.widget-products .icon-arrow,
+.widget-communications .icon-arrow { position: absolute; top: 8px; right: 21px; }
+
+.widget-services .widgettitle,
+.widget-solutions .widgettitle,
+.widget-products .widgettitle,
+.widget-communications .widgettitle { color: #fff; }
+
+.widget-services-0 .widgettitle { background: #4ca4d7; }
+.widget-services-1 .widgettitle { background: #9fb84c; }
+.widget-services-2 .widgettitle { background: #ef9e1f; }
+
+.widget-products-0 .widgettitle { background: #4ca4d7; }
+.widget-products-1 .widgettitle { background: #9fb84c; }
+.widget-products-2 .widgettitle { background: #ef9e1f; }
+
+.widget-services ul,
+.widget-solutions ul,
+.widget-products ul,
+.widget-communications ul { padding: 4px 0 0 47px; list-style: none outside none; font-size: 22px; line-height: 1.4; }
+
+.widget a { color: #606758; }
+.widget .clear a { color: #A0B94B; }
+
+.widget-services a:hover,
+.widget-solutions a:hover,
+.widget-products a:hover,
+.widget-communications a:hover { color: #a0b94b; text-decoration: none; }
+
+.widget-filter .widget-content { display: none; }
+.widget-filter .widgettitle { padding: 9px 11px 5px; background: #e1e3d3; text-transform: uppercase; cursor: pointer; }
+.widget-filter ul { list-style: none outside none; line-height: 1.1; }
+.widget-filter ul ul { padding: 5px 0 12px 36px; }
+.widget-filter ul ul li { padding-bottom: 4px; }
+.widget-filter label { font-size: 19px; }
+.widget-filter ul ul .icheckbox { margin-right: 13px; }
+.widget-filter .checkbox { margin: 0; padding-left: 24px; }
+.widget-filter .clear { padding: 11px 23px 0 0; margin: 0; text-align: right; line-height: 1; }
+.widget-filter .clear a:hover { text-decoration: none; color: #606758; }
+.widget-filter .icon-toggle { position: absolute; top: 10px; right: 20px; }
+.widget-filter.active .icon-toggle { background-position: -78px -199px; }
+
+.widget-filter .longlist {
+    margin-top: 6px;
+    max-height: 256px;
+    overflow: auto;
+    position: relative;
+}
+
+.widget-filter input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.icheckbox {display: inline-block; *display: inline; vertical-align: middle; margin-right: 14px; padding: 0; width: 18px; height: 18px; background: url(images/sprite.png) no-repeat; border: none; cursor: pointer; }
+
+.icheckbox {background-position: -109px -187px; }
+.icheckbox.checked {background-position: -90px -187px; }
+
+/* ==========================================================================
+    #Services
+========================================================================== */
+.services { position: relative; top: -12px; }
+.services p { margin-bottom: 0; }
+.services .more { padding-right: 12px; background: url(images/arrow-green.png) right 6px no-repeat; }
+.services .more:hover { color: #a0b94b; }
+
+.services .gis,
+.services .solutions,
+.services .communications,
+.services .focus .title { font-size: 24px; line-height: 1.2; padding-right: 3px; }
+
+.services .gis,
+.services .focus p:first-child .colored,
+.services .focus p:nth-child(3n+1) .title { color: #4ea4d6; }
+
+.services .solutions,
+.services .focus p:nth-child(3n+2) .title { color: #a0b94b; }
+
+.services .communications,
+.services .focus p:nth-child(3n+3) .title { color: #ed9e21; }
+
+.services .pagination { text-align: right; width: 100%; margin-top: 0; }
+.services .description { margin-bottom: 10px; }
+
+.services { padding-top: 0; }
+
+.services .view-projects a { float: right; }
+.services .latest-work { margin-top:  10px; }
+.services .latest-work .row { margin-top: 8px; }
+
+.widgettitle.active {
+    background-color: #ED9E21;
+    color: #FFFFFF;
+}
+
+/* ==========================================================================
+    #Single Project
+========================================================================== */
+
+.project .blue,
+.project .green,
+.project .orange {
+    font-size: 24px; line-height: 1.2; padding-right: 3px;
+}
+
+.project .blue, .blue {
+    color: #4ea4d6;
+}
+
+.project .green, .green {
+    color: #a0b94b;
+}
+
+.project .orange, .orange {
+    color: #ed9e21;
+}
+
+.project .col-md-8 {
+    padding-right: 0;
+}
+.project .col-md-4 {
+    padding-left: 0;
+}
+
+.project .client {
+    vertical-align: top;
+}
+.project .client:hover {
+    
+}
+.project img {
+    max-width: 100%;
+}
+.project .image-holder {
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 2px;
+}
+.project .image-gallery > div {
+    margin-top:  14px;
+}
+.project .image-gallery > div:nth-child(2n+1) {
+    clear: both;
+}
+.project .main-head {
+    margin-bottom: 18px;
+}
+.project .kudos {
+    padding-bottom: 15px;
+}
+.project .kudos p {
+    padding-bottom: 0;
+    color: #4ea4d6;
+}
+.project .kudos p.quote-person {
+
+}
+.project .links a {
+    font-family: 'Gotham Narrow Bold';
+    color: #ed9e21;
+    font-size: 16px;
+}
+
+.project .links {
+}
+
+/* ==========================================================================
+    #ABOUT
+========================================================================== */
+
+.staff-list, .board-list {
+    margin-top: 16px;
+}
+.row.staff > div:nth-child(4n+1) {
+    clear: both;
+}
+.row.staff > div { margin-bottom: 25px; text-align: center; }
+.row.staff a { color:  #606758; }
+
+.newsletter-archive table { width: 100%; }
+.newsletter-archive th, .newsletter-archive td {
+    text-align: center;
+}
+.newsletter-archive td > span, .newsletter-archive th > span {
+    padding-left:.4em;
+}
+.newsletter-archive td:first-child, .newsletter-archive th:first-child {
+    text-align: left;
+}
+
+.newsletter-archive td, .newsletter-archive th {
+    max-width: 10%;
+}
+
+#contact_map {
+    height: 400px;
+    margin-bottom: 20px;
+    margin-top: 28px;
+    width: 100%;
+    border:2px solid #e1e3d3;
+}
+
+#contact_map p {
+    padding: 5%;    
+}
+
+/* ==========================================================================
+    #Products
+========================================================================== */
+
+
+/* ==========================================================================
+    #Latest work
+========================================================================== */
+.latest-work { padding-top: 16px; margin-left: -10px;}
+.latest-work .row > div { margin-bottom: 25px; }
+.latest-work .row > div:nth-child(3n+1) { clear: both; }
+.latest-work .text { height: 70px; padding: 14px 6px 0; background: #e1e3d3; text-align: center; }
+.latest-work .thumb img { width: 100%; height: auto; }
+.latest-work h4 { margin: 0; }
+.latest-work h4 a { color: #606758; }
+
+.latest-work.project-search .row > div:nth-child(3n+1) { clear: none; }
+.latest-work.project-search .row > div:nth-child(4n+1) { clear: both; }
+
+/* ==========================================================================
+    #Search
+========================================================================== */
+
+form#new-search {
+    display: inline; float: right;margin-top: 18px;
+}
+
+/* ==========================================================================
+    #Intro
+========================================================================== */
+.intro { padding-bottom: 27px; text-align: center; }
+.intro .thumb img { width: 100%; height: auto; }
+.intro h2 { padding-bottom: 24px; }
+.intro h2 a { color: #A0B94B; }
+.intro h2 a:hover { color: #a0b94b; text-decoration: underline; }
+.intro strong,
+.intro span { display: block; font-size: 22px; line-height: 1.1; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.intro .text { padding: 22px 10px 18px; }
+.intro a { text-decoration: none; }
+
+.intro .gis { background: #4fa5d6; }
+.intro .interactive { background: #a0b84b; }
+.intro .communications { background: #ed9d21; }
+
+/* ==========================================================================
+    #Featured
+========================================================================== */
+.featured { padding-bottom: 29px; text-align: center; }
+.featured-head { position: relative; padding-bottom: 12px; }
+
+.featured .more { position: absolute; top: 9px; right: 0; padding-right: 14px; background: url(images/arrow-green.png) right 10px no-repeat; font-size: 20px; }
+.featured .more:hover { color: #a0b94b; }
+
+.featured .thumb img { max-height: 240px; max-width: 100%; height: auto; }
+
+.featured .text { height: 70px; padding: 14px 6px 0; background: #e1e3d3; text-align: center; }
+.featured h4 { margin: 0; }
+.featured h4 a { color: #606758; }
+
+.featured .col-md-4 { margin-bottom: 20px; }
+
+/* ==========================================================================
+    #Story
+========================================================================== */
+.story { padding: 0 35px; font-size: 24px; line-height: 1.5; text-align: center; }
+.story p { padding-bottom: 0; }
+
+/* ==========================================================================
+    #Footer
+========================================================================== */
+.footer { position: absolute; bottom: 0; left: 0; width: 100%; border-top: 3px solid #e1e2d2; }
+.footer .container { height: 80px; padding-top: 17px; }
+.footer h5 { display: none; }
+
+.footer-logo,
+.address { float: left; }
+
+.footer-logo { width: 112px; }
+.footer-logo a { overflow: hidden; display: block; height: 55px; background: url(images/sprite.png) 0 -78px no-repeat; text-indent: 100%; white-space: nowrap; }
+
+.address { padding-bottom: 0; margin: 13px 0 0 30px; font-family: 'Gotham Narrow Bold', sans-serif; font-size: 16px; line-height: 1.38; color: #606758; }
+.address a:hover { text-decoration: underline; color: #a0b94b; }
+
+.footer-links { float: right; margin-top: 15px; }
+
+.footer .socials { display: none; }
+
+/* ==========================================================================
+    jQuery dialog
+========================================================================== */
+
+.ui-dialog {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: medium solid #4FA5D6;
+    border-radius: 3.5px;
+    padding: 4px 9px;
+    position: absolute;
+}
+.ui-dialog-title {
+    font-family: 'Gotham Narrow Bold',sans-serif;
+}
+.ui-dialog-titlebar {
+    cursor: move;
+    padding: 0.5em 0.5em 0;
+}
+.ui-dialog-titlebar-close {
+    /*display: none;*/ /*jmk*/
+}
+.ui-dialog-buttonset {
+    text-align: right;
+    padding-bottom: 4px;
+}
+.ui-dialog-buttonset > button {
+    padding: 0 4px;
+    margin-left: 9px;
+}
+
+#dialog_share {
+    font-size: 14px;
+    padding: 0 .5em;
+}
+
+#dialog_share textarea {
+    margin-top: 4px;
+    width: 98%;
+    padding: 1px 4px;
+}
+
+/* Modal */
+.ui-widget-overlay {
+    background: #2b2922 url(images/ui-bg_inset-soft_15_2b2922_1x100.png) 50% bottom repeat-x;
+    opacity: .9;
+    filter: Alpha(Opacity=90);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ===================================================================================
+   jQuery Tabs
+=================================================================================== */
+.ui-tabs {
+    position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+    padding: .2em;
+}
+.ui-tabs .ui-tabs-nav {
+    margin: 0;
+    padding: .2em .2em 0;
+}
+.ui-tabs .ui-tabs-nav li {
+    list-style: none;
+    float: left;
+    position: relative;
+    top: 0;
+    margin: 1px .2em 0 0;
+    border: 1px solid #D4CCB0;
+    border-bottom: 0;
+    padding: 0;
+    white-space: nowrap;
+    border-radius: 3px 3px 0 0;
+}
+.ui-tabs .ui-tabs-nav li a {
+    float: left;
+    padding: .5em 1em;
+    text-decoration: none;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a,
+.ui-tabs .ui-tabs-nav li.ui-state-disabled a,
+.ui-tabs .ui-tabs-nav li.ui-tabs-loading a {
+    cursor: text;
+    color: #606758;
+    font-family: 'Gotham Narrow Bold';
+}
+.ui-tabs .ui-tabs-nav li a, /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a {
+    cursor: pointer;
+}
+.ui-tabs .ui-tabs-panel {
+    display: block;
+    clear: both;
+    border-width: 0;
+    padding: .6em;
+    background: none;
+    overflow: auto;
+}
+
+/* ===================================================================================
+   jQuery Autocomplete
+=================================================================================== */
+.ui-autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: default;
+    max-height: 200px;
+    overflow: auto;
+    border: 1px solid #DFD9C3;
+    background: #ffffff;
+    list-style: none;
+    padding: 4px;
+}
+
+.ui-menu .ui-menu-item {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.ui-menu .ui-menu-item .ui-state-focus {
+    background-color: #E1E2D2;
+    padding: 2px;
+}
+
+/* Layout helpers
+----------------------------------*/
+.ui-helper-hidden {
+    display: none;
+}
+.ui-helper-hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+.ui-helper-reset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    line-height: 1.3;
+    text-decoration: none;
+    font-size: 100%;
+    list-style: none;
+}
+.ui-helper-clearfix:before,
+.ui-helper-clearfix:after {
+    content: "";
+    display: table;
+}
+.ui-helper-clearfix:after {
+    clear: both;
+}
+.ui-helper-clearfix {
+    min-height: 0; /* support: IE7 */
+}
+.ui-helper-zfix {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    opacity: 0;
+    filter:Alpha(Opacity=0);
+}
+
+.ui-front {
+    z-index: 100;
+}
+
+/*
+ * jQuery UI Datepicker 1.8.16
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Datepicker#theming
+ */
+.ui-datepicker { width: 14.5em; padding: .2em .2em 0; display: none; border:  1px solid #507383; font-size: 1em; }
+.ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; font-size: 0.84em;}
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
+.ui-datepicker .ui-datepicker-prev { left:2px; }
+.ui-datepicker .ui-datepicker-next { right:2px; }
+.ui-datepicker .ui-datepicker-prev-hover { left:1px; }
+.ui-datepicker .ui-datepicker-next-hover { right:1px; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
+.ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
+.ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
+.ui-datepicker select.ui-datepicker-month-year {width: 100%;}
+.ui-datepicker select.ui-datepicker-month, 
+.ui-datepicker select.ui-datepicker-year { width: 49%;}
+.ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
+.ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
+.ui-datepicker td { border: 0; padding: 1px; }
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em; text-align: right; text-decoration: none; }
+.ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
+.ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
+.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }
+
+/* with multiple calendars */
+.ui-datepicker.ui-datepicker-multi { width:auto; }
+.ui-datepicker-multi .ui-datepicker-group { float:left; }
+.ui-datepicker-multi .ui-datepicker-group table { width:95%; margin:0 auto .4em; }
+.ui-datepicker-multi-2 .ui-datepicker-group { width:50%; }
+.ui-datepicker-multi-3 .ui-datepicker-group { width:33.3%; }
+.ui-datepicker-multi-4 .ui-datepicker-group { width:25%; }
+.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-buttonpane { clear:left; }
+.ui-datepicker-row-break { clear:both; width:100%; font-size:0em; }
+
+/* RTL support */
+.ui-datepicker-rtl { direction: rtl; }
+.ui-datepicker-rtl .ui-datepicker-prev { right: 2px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next { left: 2px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-prev:hover { right: 1px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next:hover { left: 1px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane { clear:right; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane button { float: left; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current { float:right; }
+.ui-datepicker-rtl .ui-datepicker-group { float:right; }
+.ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+.ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+
+/* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
+.ui-datepicker-cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 200px; /*must have*/
+    height: 200px; /*must have*/
+}
+
+.ui-datepicker {
+  padding: 4px 18px 4px 2px;
+  background-color: #fff;
+}
+
+.ui-datepicker-header a {
+    cursor: pointer;
+}
+
+.ui-datepicker-today a {
+    color: #E35A2C;
+}

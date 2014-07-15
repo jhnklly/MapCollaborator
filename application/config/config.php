@@ -9,14 +9,26 @@
 //
 $config['htmltitle']    = "MapCollaborator Template and Demo";
 $config['sitename']     = "Template Edition";
-$config['base_url']     = 'http://www.mapcollaborator.org/template/';
+$config['base_url']     = 'http://websites.greeninfo.org/greeninfo/staff/jk/mapcollabs/git/mapcollab_template_jk/MapCollaborator/';
+
+// style configs (jmk)
+/*
+config here or just in css?
+fix jquery section so custom/themeroller jquery ui css can be used
+$config['style']        = array(
+    'font-family'       => "Gotham Narrow Book', sans-serif",
+    'color1'       => "rgba(128,105,165,1.0)", // purple
+    'color2'       => "rgba(181,209,124,1.0)", // green
+    'border-radius'       => "3px", // green
+);
+*/
 
 //
 // when emails are sent from the system such as notices, acceptances, or rejections
 // these form the name & address on the email received by the user
 // tip: make it a real one so people can simply Reply if they have questions
 //
-$config['email_fromaddr']     = "gin@greeninfo.org";
+$config['email_fromaddr']     = "john@greeninfo.org";
 $config['email_fromname']     = "GreenInfo Network";
 
 //
@@ -43,29 +55,15 @@ $config['bing_api_key'] = 'AjBuYw8goYn_CWiqk65Rbf_Cm-j1QFPH-gGfOxjBipxuEB2N3n9yA
 // tip: your own CSS overrides may or may not look good if you later change themes; those JQUI themes do have a lot of unpredictable variations, and you may need to make numerous adjustments to styling
 //
 //$config['jqueryui_theme'] = 'black-tie';
-//$config['jqueryui_theme'] = 'blitzer';
-//$config['jqueryui_theme'] = 'cupertino';
-//$config['jqueryui_theme'] = 'dark-hive';
-//$config['jqueryui_theme'] = 'dot-luv';
-//$config['jqueryui_theme'] = 'eggplant';
-//$config['jqueryui_theme'] = 'excite-bike';
-//$config['jqueryui_theme'] = 'flick';
-//$config['jqueryui_theme'] = 'hot-sneaks';
-//$config['jqueryui_theme'] = 'humanity';
-//$config['jqueryui_theme'] = 'le-frog';
-//$config['jqueryui_theme'] = 'mint-choc';
-//$config['jqueryui_theme'] = 'overcast';
-//$config['jqueryui_theme'] = 'pepper-grinder';
-//$config['jqueryui_theme'] = 'redmond';
-//$config['jqueryui_theme'] = 'smoothness';
 //$config['jqueryui_theme'] = 'south-street';
 $config['jqueryui_theme'] = 'start';
 //$config['jqueryui_theme'] = 'sunny';
-//$config['jqueryui_theme'] = 'swanky-purse';
-//$config['jqueryui_theme'] = 'trontastic';
 //$config['jqueryui_theme'] = 'ui-darkness';
 //$config['jqueryui_theme'] = 'ui-lightness';
 //$config['jqueryui_theme'] = 'vader';
+// jmk; new config option for themeroller jquery ui; needs to be ref'd in index.phtml
+// TODO: minify css
+$config['jqueryui_theme_full_url'] = $config['base_url'] . 'application/views/site/jquery-ui-1.10.4.custom.css';
 
 //
 // the core map layers, the ones actually being collaborated

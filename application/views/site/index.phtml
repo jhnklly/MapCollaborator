@@ -27,7 +27,8 @@
     <!-- jQuery and jQuery UI -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/<?= $jqueryui_theme ?>/jquery-ui.css">
+    <!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/<?= $jqueryui_theme ?>/jquery-ui.css"> -->
+    <link rel="stylesheet" type="text/css" href="<?= $jqueryui_theme_full_url ?>">
 
     <!-- pURL an URL param string parser -->
     <script type="text/javascript" src="<?= site_url('application/views/site/purl.js'); ?>"></script>
@@ -37,7 +38,10 @@
 
     <!-- the glue to bring it together -->
     <script type="text/javascript" src="<?= site_url('application/views/site/mapconstants.js'); ?>"></script>
+
+    <link rel="stylesheet" type="text/css" href="<?= site_url('application/views/site/fonts.css'); ?>" />
     <link rel="stylesheet" type="text/css" href="<?= site_url('application/views/site/index.css'); ?>" />
+    <!-- <link rel="stylesheet" type="text/css" href="<?= site_url('application/views/site/gin_style.css'); ?>" / -->
     <link rel="stylesheet" type="text/css" href="<?= site_url('application/views/site/fixes.css'); ?>" />
     <script type="text/javascript" src="<?= site_url('application/views/site/index.js'); ?>"></script>
 

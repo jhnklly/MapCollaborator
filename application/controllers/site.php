@@ -16,6 +16,8 @@ public function index() {
     $data['htmltitle'] = $this->config->item('htmltitle');
     $data['sitename']  = $this->config->item('sitename');
     $data['jqueryui_theme'] = $this->config->item('jqueryui_theme');
+    $data['jqueryui_theme_full_url'] = $this->config->item('jqueryui_theme_full_url');
+
 
     // layer configurations, so the template can iterate over them and generate their legend entries (or not)
     $data['core_layers'] = $this->config->item('core_layers');
