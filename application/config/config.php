@@ -8,7 +8,7 @@
 // the title and URL of this app
 //
 $config['htmltitle']    = "MapCollaborator Template and Demo";
-$config['sitename']     = "Template Edition";
+$config['sitename']     = "Template";
 $config['base_url']     = 'http://websites.greeninfo.org/greeninfo/staff/jk/mapcollabs/git/mapcollab_template_jk/MapCollaborator/';
 
 // style configs (jmk)
@@ -63,7 +63,7 @@ $config['jqueryui_theme'] = 'start';
 //$config['jqueryui_theme'] = 'vader';
 // jmk; new config option for themeroller jquery ui; needs to be ref'd in index.phtml
 // TODO: minify css
-$config['jqueryui_theme_full_url'] = $config['base_url'] . 'application/views/site/jquery-ui-1.10.4.custom.css';
+$config['jqueryui_theme_full_url'] = $config['base_url'] . 'application/views/site/assets/jquery/jquery-ui-1.10.4.custom.min.css';
 
 //
 // the core map layers, the ones actually being collaborated
@@ -106,7 +106,7 @@ $config['jqueryui_theme_full_url'] = $config['base_url'] . 'application/views/si
 $config['core_layers'] = array();
 $config['core_layers']['notes'] = array(
     'enabled'       => TRUE,
-    'onbydefault'   => TRUE,
+    'onbydefault'   => FALSE,
     'opacity'       => 100,
     'title'         => "Notes",
     'tooltip'       => "Notes posted by contributors",
@@ -118,7 +118,7 @@ $config['core_layers']['notes'] = array(
 );
 $config['core_layers']['points'] = array(
     'enabled'       => TRUE,
-    'onbydefault'   => TRUE,
+    'onbydefault'   => FALSE,
     'opacity'       => 100,
     'title'         => "Points",
     'tooltip'       => "Points in the database",
@@ -180,7 +180,7 @@ $config['core_layers']['polygons'] = array(
 $config['context_layers'] = array();
 $config['context_layers'][] = array(
     'title'        => 'Towns & Cities',
-    'onbydefault'  => TRUE,
+    'onbydefault'  => FALSE,
     'tooltip'      => "City and town boundaries (UGBs) as of 2010",
     'wmslayer'     => 'towns',
     'opacity'      => 25,

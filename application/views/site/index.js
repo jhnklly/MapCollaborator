@@ -178,7 +178,8 @@ function initMiscDialogsAndButtons() {
 
 function initAccordion() {
     $('#dialog_accordion').dialog({
-        autoOpen:true, closeOnEsc:false, draggable:false, resizable:false,
+        /*jmk set draggable true*/
+        autoOpen:true, closeOnEsc:false, draggable:true, resizable:false,
         width:325, height:'auto', maxHeight: $(window).height() * DIALOGMAXHEIGHT['dialog_accordion'],
         title: 'MapCollaborator Menu',
         position: DIALOGPOSITIONS['dialog_accordion'],

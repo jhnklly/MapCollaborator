@@ -8,7 +8,7 @@ var START_LAT  =   37.33655;
 var START_ZOOM = 6;
 var MIN_ZOOM   = START_ZOOM;
 var MAX_ZOOM   = START_ZOOM+10;
-var START_BASEMAP = 'cpad';
+var START_BASEMAP = 'Streets';
 
 // the URL of the WMSs which render the core dataset layers (core.map) and the context layers (layers.map)
 var WMSURL_CORE          = "/cgi-bin/mapserv?map=/maps/mapcollaborator/template/wms/core.map";
@@ -20,32 +20,42 @@ var WMSURL_COREHIGHLIGHT = "/cgi-bin/mapserv?map=/maps/mapcollaborator/template/
 // so we can get fast random access to arbitrary layers by name
 var BASEMAPS = [
     {
+        button:'Streets',
+        url:'http://tilestache-cdn-1.greeninfo.org/tilestache/tilestache.py/landwater_hillshade/{z}/{x}/{y}.jpg',
+        attrib:'Map tiles and parks data by <a target="_blank" href="http://www.greeninfo.org">GreenInfo Network</a>.<br />Streets data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+    },
+    /*{
         button:'cpad',
         //url:'http://tilestache-cdn-1.greeninfo.org/tilestache/tilestache.py/basemap_cpadlight_nolabels/{z}/{x}/{y}.jpg',
         url:'http://tilestache-cdn-1.greeninfo.org/tilestache/tilestache.py/basemap_nolabels/{z}/{x}/{y}.jpg',
         //url:'http://tilestache-cdn-1.greeninfo.org/tilestache/tilestache.py/basemap_withlabels/{z}/{x}/{y}.jpg',
         attrib:'Map tiles and parks data by <a target="_blank" href="http://www.greeninfo.org">GreenInfo Network</a>.<br />Streets data by <a target="_blank" href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
-    },
+    },*/
     {
         button:'photo',
         url:'http://{s}.tiles.mapbox.com/v3/greeninfo.map-zudfckcw/{z}/{x}/{y}.jpg',
         attrib:'Map tiles by <a target="_blank" href="http://www.mapbox.com">MapBox</a>.<br />Data &copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a>'
     },
-    {
+    /*{
         button:'terrain',
         url:'http://{s}.tiles.mapbox.com/v3/greeninfo.map-3x7sb5iq/{z}/{x}/{y}.jpg',
         attrib:'Map tiles by <a target="_blank" href="http://www.mapbox.com">MapBox</a>.<br />Data &copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a>'
-    },
-    {
+    },*/
+    /*{
         button:'topo',
         url:'http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.jpg',
         attrib:'&copy; <a target="_blank" href="http://esri.com/" target="_blank">ESRI</a>'
-    },
+    },*/
     {
+        button:'terrain',
+        url:'http://services.arcgisonline.com/arcgis/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}.png',
+        attrib:'&copy; <a target="_blank" href="http://esri.com/" target="_blank">ESRI</a>'
+    },
+    /*{
         button:'osm',
         url:'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attrib:'&copy; <a target="_blank" href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a>'
-    },
+    }*/
 ];
 
 
@@ -53,7 +63,7 @@ var BASEMAPS = [
 // the resulting L.tileLayer will be added above all others, so the labels show above everything else (well, not markers)
 // you can set this to null in order to not use a labels layer at all
 LABELS = 'http://{s}.tiles.mapbox.com/v3/greeninfo.map-qwnj26en/{z}/{x}/{y}.png';
-
+LABELS_ocean = 'http://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}.png';
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///// GLOBALS YOU WILL PROBABLY NOT WANT TO CONFIGURE
@@ -64,8 +74,12 @@ LABELS = 'http://{s}.tiles.mapbox.com/v3/greeninfo.map-qwnj26en/{z}/{x}/{y}.png'
 // tip: these are an assoc so a diaog can automagically be mapped to a position setting by its HTML ID
 // tip: listing a dialog here is optional; see handleResize()
 var DIALOGPOSITIONS = {};
-DIALOGPOSITIONS['dialog_accordion'] = { my:'left top', at:'left+40 top+10', of:'#map' };
-DIALOGPOSITIONS['dialog_legend']    = { my:'right top', at:'right-9 top+38', of:'#map' };
+DIALOGPOSITIONS['dialog_accordion'] = { my:'left top', at:'left+43 top-11', of:'#map' };
+DIALOGPOSITIONS['dialog_legend']    = { my:'right top', at:'right-9 top+20', of:'#map' };
+/*
+DIALOGPOSITIONS['dialog_accordion'] = { my:'left top', at:'left+40 top+0', of:'#map' };
+DIALOGPOSITIONS['dialog_legend']    = { my:'right top', at:'right-9 top+30', of:'#map' };
+*/
 DIALOGPOSITIONS['dialog_share']     = { my:'center middle', at:'center middle', of:'#map' };
 
 // the max height settings for the popup dialogs

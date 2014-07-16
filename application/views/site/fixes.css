@@ -120,6 +120,8 @@
 }
 
 .leaflet-control-dialogtoggle {
+    margin-top: 0px !important; /*jmk*/
+
     width:26px;
     height:26px;
 
@@ -148,19 +150,75 @@
 
 
 /* begin jmk */
-/* Unify fonts globally (override jquery ui) */
-* {font-family: 'Gotham Narrow Book', sans-serif;}
+/* 
+Unify fonts globally (override jquery ui) 
+move these to index.css?
+*/
+* {
+    font-family: 'Gotham Narrow Book', sans-serif !important;
+}
+
+.titles {
+    font-family: 'interstate-boldbold', sans-serif !important;
+    line-height: 85px;
+    color: white;
+    font-size: 45px;
+}
+#title_mc {
+    display: inline-block;
+    margin-right: 20px;
+    color: rgba(125,141,176,1);
+}
+
+
+.color1, #dialog_accordion h1 {
+    /*background-color: rgba(68,129,69,1);*/ /*green*/
+    background-color: rgba(174,183,188,1); 
+    color: rgba(250,255,255,1);
+}
+.color2 {
+    /*background-color: rgba(112,78,103,1);*/ /*purple*/
+    background-color: rgba(240,244,245,1); 
+}
+
+#leftsidebar, #rightsidebar {
+    background-color: rgba(240,244,245,1); 
+}
 
 /* more jquery overrides */
 .ui-dialog {
     background: none repeat scroll 0 0 #ffffff;
     /*border: 1px solid #4FA5D6;*/
+    border: 1px solid #7e7e7e;
     border-radius: 0px;
     padding: 0px;
     position: absolute;
 }
 
+.ui-dialog-header {
+    padding: 0.2em 0.5em;
+}
 
+.ui-dialog .ui-dialog-titlebar {
+    padding: 0.2em 0.5em;
+}
+
+.ui-widget-header {
+    color: rgba(250,255,255,1);
+    font-size: 1.2rem;
+}
+
+.ui-widget {
+    font-size: 1rem;
+}
+
+
+#dialog_accordion h1, #dialog_accordion h1.accordion_active {
+    background-image: none;
+    padding-left: 0.3em;
+}
+
+* { box-sizing: border-box }
 /* end jmk */
 
 
